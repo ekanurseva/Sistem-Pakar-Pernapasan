@@ -1,8 +1,10 @@
 <?php
 include("konek.php");
 $data = query("SELECT * FROM diagnosa");
+$data_solusi = query("SELECT * FROM solusi");
 
 $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
+$jumlah_solusi = jumlah_data("SELECT * FROM solusi");
 
 ?>
 
@@ -47,19 +49,26 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
           <!-- <img src="img/dokter.png" style="width:200px; possition:absolute;" alt=""> -->
         </div>
         <div class="col-7">
-          <form style="margin-top: 40px;" class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
         </div>
         <div class="row align-items-start text-center">
-          <div class="col-4">
+          <div class="col-4 mt-3">
             <div class="card" style="width: 15rem;">
               <div class="card-body">
-                <a class="card-title" href="inputpenyakit.php"><button>+</button> Insert Data Penyakit dan Solusi</a>
+                <a class="card-title" href="inputpenyakit.php"><button>+</button> Insert Data Penyakit</a>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Data</h6>
                 <p class="card-text">
                   <?= $jumlah_penyakit; ?>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-4 mt-3">
+            <div class="card" style="width: 15rem;">
+              <div class="card-body">
+                <a class="card-title" href="inputsolusi.php"><button>+</button> Insert Data Solusi</a>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Data</h6>
+                <p class="card-text">
+                  <?= $jumlah_solusi; ?>
                 </p>
               </div>
             </div>
@@ -72,7 +81,6 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
                 <th scope="col">Penyakit</th>
                 <th scope="col">Kode</th>
                 <th scope="col">Deskripsi</th>
-                <th scope="col">Solusi</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
@@ -95,9 +103,6 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
                     <?= $p['deskripsi']; ?>
                   </td>
                   <td>
-                    <?= $p['solusi']; ?>
-                  </td>
-                  <td>
                     <a style="text-decoration: none;" href="editpenyakit.php?id=<?= $p['iddiagnosa']; ?> ">Edit </a> |
                     <a style="text-decoration: none;" href="delete_penyakit.php?iddiagnosa=<?= $p['iddiagnosa']; ?>"
                       onclick="return confirm('Apakah anda yakin ingin menghapus data?')">Hapus</a>
@@ -105,6 +110,43 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
                 </tr>
                 <?php
                 $i++;
+              endforeach
+              ?>
+            </tbody>
+          </table>
+
+          <table class="table mt-3" id="example2">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Penyakit</th>
+                <th scope="col">Solusi</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $j = 1; foreach ($data as $s):
+                ?>
+                <tr>
+                  <th>
+                    <?= $j; ?>
+                  </th>
+                  <td>
+                    <?= $s['nama_diagnosa']; ?>
+                  </td>
+                  <td>
+                    <?= $s['solusi']; ?>
+                  </td>
+                  <td>
+                    <a style="text-decoration: none;" href="editsolusi.php?id=<?= $s['idsolusi']; ?> ">Edit </a>
+                    |
+                    <a style="text-decoration: none;" href="delete_solusi.php?idsolusi=<?= $s['idsolusi']; ?>"
+                      onclick="return confirm('Apakah anda yakin ingin menghapus data?')">Hapus</a>
+                  </td>
+                </tr>
+                <?php
+                $j++;
               endforeach
               ?>
             </tbody>
@@ -121,6 +163,9 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
     <script>
       $(document).ready(function () {
         $("#example").DataTable();
+      });
+      $(document).ready(function () {
+        $("#example2").DataTable();
       });
       $(".sidebar ul li").on('click', function () {
         $(".sidebar ul li.active").removeClass("active")

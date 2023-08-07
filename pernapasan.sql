@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2023 at 04:28 PM
+-- Generation Time: Aug 07, 2023 at 03:33 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -31,18 +31,17 @@ CREATE TABLE `diagnosa` (
   `iddiagnosa` int(15) NOT NULL,
   `kode_diagnosa` varchar(25) NOT NULL,
   `nama_diagnosa` varchar(50) NOT NULL,
-  `deskripsi` text NOT NULL,
-  `solusi` text NOT NULL
+  `deskripsi` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `diagnosa`
 --
 
-INSERT INTO `diagnosa` (`iddiagnosa`, `kode_diagnosa`, `nama_diagnosa`, `deskripsi`, `solusi`) VALUES
-(3, 'P1', 'Ambeyen', 'aduh sakit pantat', 'minum makanan bergizi'),
-(4, 'P2', 'Sesak Napas', 'sesak karena ditinggal kamuuu eaaa', 'mandi kembang'),
-(5, 'P3', 'Kurang Oksigen', 'Kurang oksigen dapat menyababkan rindu', 'Makan eskrim');
+INSERT INTO `diagnosa` (`iddiagnosa`, `kode_diagnosa`, `nama_diagnosa`, `deskripsi`) VALUES
+(3, 'P1', 'Ambeyen', 'aduh sakit pantat'),
+(4, 'P2', 'Sesak Napas', 'sesak karena ditinggal kamuuu eaaa'),
+(5, 'P3', 'Kurang Oksigen', 'Kurang oksigen dapat menyababkan rindu');
 
 -- --------------------------------------------------------
 
@@ -134,6 +133,18 @@ INSERT INTO `pertanyaan` (`idpertanyaan`, `idgejala`, `kode_pertanyaan`, `pertan
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `solusi`
+--
+
+CREATE TABLE `solusi` (
+  `idsolusi` int(11) NOT NULL,
+  `iddiagnosa` int(11) NOT NULL,
+  `solusi` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
@@ -144,24 +155,22 @@ CREATE TABLE `user` (
   `nama` varchar(50) NOT NULL,
   `jk` char(2) NOT NULL,
   `email` varchar(40) NOT NULL,
-  `telepon` varchar(20) NOT NULL,
-  `level` varchar(10) NOT NULL,
-  `tgl_lahir` date NOT NULL
+  `level` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`iduser`, `username`, `password`, `nama`, `jk`, `email`, `telepon`, `level`, `tgl_lahir`) VALUES
-(1, 'kamu', '$2y$10$19sMF4MAYY67XbYhrzPcaeHic7y/tFJ/U49ZMo8zOTQaiFCqD7Bju', 'aku', 'L', 'aku123@gmail.com', '098866899', 'admin', '2000-08-20'),
-(3, 'nura', '1234', 'Nuraenii', 'P', 'nuraaa@gmail.com', '097686823', 'admin', '2020-05-01'),
-(8, 'umc', '$2y$10$YfKRn8nRZ9R7nIIUeiQZj.SSb.m2OvCl1Ou2dJpEFl5', 'enur', 'L', 'sagacsa@gmail.com', '0896768888', 'admin', '2000-05-01'),
-(9, 'nurr', '$2y$10$HPnuY30VYVTe9ET37fQOmeXj3nbdw31BvW7yeWpKiCQ', 'Nur Aeni', 'P', 'nurraeni@gmail.com', '0896768888', 'user', '2000-05-01'),
-(10, 'aenur', '$2y$10$ad/pV4MsO9WxBp8Fl9Zjrezq0f2tmTbO1Qe9N6fpG/oYhWf.bKF1m', 'NUR AENI 01', 'P', 'nurraeni@gmail.com', '0896768888', 'user', '2000-05-01'),
-(11, 'nuraeni', '$2y$10$yWoq9eZTdAJiMftUybojWudbRY9YUEVByf9F.VRBdOu8Q.DVQt3i6', 'Aeni Nur ', 'P', 'nuraeni@gmail.com', '0897457238', 'user', '2000-05-01'),
-(18, 'eka', '$2y$10$MLui6ZeLOLU8nV18050h3.TuDhYtd3Yg0KRB/LMYDgcQuhSnP0gEe', 'Eka Nurseva S', 'P', 'ekanursevas@gmail.com', '08718261831', 'user', '2020-12-28'),
-(19, 'ens', '$2y$10$DRjjIIQHbTyZ9lPeIJO7QeQD7V82qxK.1YXbMkddEPAnsbB/0q28K', 'Eka Nurseva Ens', 'P', 'ekanursevas@gmail.com', '087656789987', 'admin', '2020-12-28');
+INSERT INTO `user` (`iduser`, `username`, `password`, `nama`, `jk`, `email`, `level`) VALUES
+(1, 'kamu', '$2y$10$19sMF4MAYY67XbYhrzPcaeHic7y/tFJ/U49ZMo8zOTQaiFCqD7Bju', 'aku', 'L', 'aku123@gmail.com', 'admin'),
+(3, 'nura', '1234', 'Nuraenii', 'P', 'nuraaa@gmail.com', 'admin'),
+(8, 'umc', '$2y$10$YfKRn8nRZ9R7nIIUeiQZj.SSb.m2OvCl1Ou2dJpEFl5', 'enur', 'L', 'sagacsa@gmail.com', 'admin'),
+(9, 'nurr', '$2y$10$HPnuY30VYVTe9ET37fQOmeXj3nbdw31BvW7yeWpKiCQ', 'Nur Aeni', 'P', 'nurraeni@gmail.com', 'user'),
+(10, 'aenur', '$2y$10$ad/pV4MsO9WxBp8Fl9Zjrezq0f2tmTbO1Qe9N6fpG/oYhWf.bKF1m', 'NUR AENI 01', 'P', 'nurraeni@gmail.com', 'user'),
+(11, 'nuraeni', '$2y$10$yWoq9eZTdAJiMftUybojWudbRY9YUEVByf9F.VRBdOu8Q.DVQt3i6', 'Aeni Nur ', 'P', 'nuraeni@gmail.com', 'user'),
+(18, 'eka', '$2y$10$MLui6ZeLOLU8nV18050h3.TuDhYtd3Yg0KRB/LMYDgcQuhSnP0gEe', 'Eka Nurseva S', 'P', 'ekanursevas@gmail.com', 'user'),
+(19, 'ens', '$2y$10$DRjjIIQHbTyZ9lPeIJO7QeQD7V82qxK.1YXbMkddEPAnsbB/0q28K', 'Eka Nurseva Ens', 'P', 'ekanursevas@gmail.com', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -199,6 +208,12 @@ ALTER TABLE `jawaban`
 ALTER TABLE `pertanyaan`
   ADD PRIMARY KEY (`idpertanyaan`),
   ADD KEY `idgejala` (`idgejala`);
+
+--
+-- Indexes for table `solusi`
+--
+ALTER TABLE `solusi`
+  ADD PRIMARY KEY (`idsolusi`);
 
 --
 -- Indexes for table `user`
@@ -239,6 +254,12 @@ ALTER TABLE `jawaban`
 --
 ALTER TABLE `pertanyaan`
   MODIFY `idpertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `solusi`
+--
+ALTER TABLE `solusi`
+  MODIFY `idsolusi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`

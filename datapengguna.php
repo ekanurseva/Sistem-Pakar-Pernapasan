@@ -4,7 +4,6 @@ $data = query("SELECT * FROM user");
 
 $jumlah_admin = jumlah_data("SELECT * FROM user WHERE level = 'admin'");
 $jumlah_user = jumlah_data("SELECT * FROM user WHERE level = 'user'");
-
 ?>
 
 <html lang="en">
