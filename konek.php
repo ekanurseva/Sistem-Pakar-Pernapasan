@@ -23,6 +23,7 @@ function jumlah_data($data)
 
     return $jumlah_data;
 }
+
 function dekripsi($teks)
 {
     $text = $teks;
@@ -315,35 +316,10 @@ function edit_gejala($data)
 {
     global $koneksi;
     $idgejala = $data['idgejala'];
-    $oldiddiagnosa = $data['oldiddiagnosa'];
-    $oldkode_gejala = $data['kode_gejala'];
-    $oldnama_gejala = $data['gejala'];
-    $oldbobot = $data['bobot'];
-    $iddiagnosa = $data['iddiagnosa'];
-    $kode_gejala = $data['kode_gejala'];
     $nama_gejala = $data['gejala'];
     $bobot = $data['bobot'];
 
-    if (isset($data['iddiagnosa'])) {
-        $iddiagnosa = $data['iddiagnosa'];
-    } else {
-        $iddiagnosa = $oldiddiagnosa;
-    }
-
-    if ($oldkode_gejala !== $kode_gejala) {
-        $result = mysqli_query($koneksi, "SELECT kode_gejala FROM gejala WHERE kode_gejala = '$kode_gejala'");
-
-        if (mysqli_fetch_assoc($result)) {
-            echo "<script>
-                alert('Kode sudah digunakan, silahkan pakai kode lain');
-            </script>";
-            return false;
-        }
-    }
-
     $query = "UPDATE gejala SET 
-                 iddiagnosa = '$iddiagnosa',
-                 kode_gejala = '$kode_gejala',
                  nama_gejala = '$nama_gejala',
                  bobot = '$bobot'
               WHERE idgejala = '$idgejala'
@@ -529,4 +505,36 @@ function hapus_jawaban($idgejala)
 
     return mysqli_affected_rows($koneksi);
 }
+
+    function get_kode_gejala($diagnosis){
+        global $koneksi;
+        $data_diagnosis = query("SELECT kode_diagnosa FROM diagnosa WHERE iddiagnosa = $diagnosis") [0];
+        $kode_diagnosa = $data_diagnosis['kode_diagnosa'];
+
+        $query = "SELECT * FROM gejala WHERE iddiagnosa = $diagnosis";
+        $kode = "";
+
+        $jumlah = jumlah_data($query);
+
+        if($jumlah == 0) {
+            $kode = $kode_diagnosa . "1";
+        } else {
+            for($i = 1; $i <= $jumlah; $i++) { 
+                $query1 = "SELECT COUNT(*) as total FROM gejala WHERE kode_gejala = '$kode_diagnosa{$i}'";
+                $result = mysqli_query($koneksi, $query1);
+                $row = mysqli_fetch_assoc($result);
+                $totalP = $row['total'];
+
+                if ($totalP == 0) {
+                    $kode = $kode_diagnosa . $i;
+                    break;
+                } else {
+                    $angka = $jumlah + 1;
+                    $kode = $kode_diagnosa . $angka;
+                }
+            };
+        }
+
+        return $kode;
+    }
 ?>

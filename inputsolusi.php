@@ -1,19 +1,8 @@
 <?php
-include("konek.php");
-if (isset($_POST["submit_penyakit"])) {
-  if (create_penyakit($_POST) > 0) {
-    echo "
-    <script>
-    alert('Data Penyakit Berhasil Ditambah');
-    document.location.href='penyakit.php';
-    </script>
-    ";
-  } else {
-    echo "<script>
-    alert('Data Penyakit Gagal Ditambah');
-    </script>";
-  }
-}
+  include("konek.php");
+
+  $penyakit = query("SELECT * FROM diagnosa ORDER BY iddiagnosa DESC");
+
 ?>
 <html lang="en">
 
@@ -36,14 +25,13 @@ if (isset($_POST["submit_penyakit"])) {
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
-
         <li class=""><a href="riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a>
         </li>
-        <li class=""><a href="pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan Jawaban</a>
-        </li>
+        <li class="active"><a href="pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan
+            Jawaban</a></li>
         <li class=""><a href="gejala.php" style="font-size: 17px; text-decoration: none;">Data Gejala</a></li>
-        <li class="active"><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi
-          </a></li>
+        <li class=""><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi </a>
+        </li>
         <li class=""><a href="datapengguna.php" style="font-size: 17px; text-decoration: none;">Data Pengguna</a></li>
         <li class=""><a href="datadiri.php" style="font-size: 17px; text-decoration: none;">Data Diri</a></li>
         <li class=""><a href="keluar.php" style="font-size: 17px; text-decoration: none;">Keluar</a></li>
@@ -51,22 +39,28 @@ if (isset($_POST["submit_penyakit"])) {
     </div>
     <div class="content" style="width:80%;">
       <div class="container" style="padding-left: 35px; padding-right: 20px;">
-        <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Insert Data Penyakit dan Solusi</h1>
+        <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Insert Data Solusi</h1>
         <form action="" method="post">
           <div class="mb-3">
             <label class="form-label">Penyakit</label>
-            <input type="text" class="form-control" name="nama_penyakit">
+            <select class="form-control" name="gejala" require>
+              <option value="" selected hidden>--Pilih Penyakit--</option>
+              <?php
+                foreach($penyakit as $sakit) :
+              ?>
+                <option value="<?php echo $sakit['iddiagnosa'] ?>"><?php echo $sakit['kode_diagnosa']; ?>-<?php echo $sakit['nama_diagnosa'] ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
           <div class="mb-3">
-            <label class="form-label">Kode Penyakit</label>
-            <input type="text" class="form-control" name="kode">
+            <label class="form-label">Pertanyaan</label>
+            <input type="text" class="form-control" name="pertanyaan">
           </div>
           <div class="mb-3">
-            <label class="form-label">Deskripsi</label>
-            <textarea name="deskripsi" id="" cols="30" rows="10" class="form-control"></textarea>
+            <label class="form-label">Kode Pertanyaan</label>
+            <input type="text" class="form-control" name="kode_pertanyaan">
           </div>
-          
-          <button type="submit" name="submit_penyakit" class="btn btn-primary">Submit</button>
+          <button type="submit" name="submit_pertanyaan" class="btn btn-primary">Submit</button>
         </form>
       </div>
     </div>

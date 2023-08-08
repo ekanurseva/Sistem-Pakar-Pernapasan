@@ -4,6 +4,9 @@ include("konek.php");
 $idgejala = $_GET['id'];
 
 $data = query("SELECT * FROM gejala WHERE idgejala = $idgejala")[0];
+$iddiagnosa = $data['iddiagnosa'];
+
+$diagnosa = query("SELECT * FROM diagnosa WHERE iddiagnosa = $iddiagnosa")[0];
 
 if (isset($_POST['submit_gejala'])) {
   if (edit_gejala($_POST) > 0) {
@@ -63,26 +66,14 @@ if (isset($_POST['submit_gejala'])) {
         <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Edit Data Gejala</h1>
         <form action="" method="post">
           <input type="hidden" name="idgejala" value="<?= $data['idgejala']; ?>">
-          <input type="hidden" name="oldiddiagnosa" value="<?= $data['iddiagnosa']; ?>">
-          <input type="hidden" name="oldkode_gejala" value="<?= $data['kode_gejala']; ?>">
-          <input type="hidden" name="oldnama_gejala" value="<?= $data['nama_gejala']; ?>">
-          <input type="hidden" name="oldbobot" value="<?= $data['bobot']; ?>">
 
           <div class="mb-3">
             <label class="form-label">Penyakit</label>
-            <select class="form-control" name="iddiagnosa" require>
-              <option value="">--Pilih Penyakit--</option>
-              <?php
-              $diagnosa = mysqli_query($koneksi, "SELECT * FROM diagnosa ORDER BY iddiagnosa DESC");
-              while ($p = mysqli_fetch_array($diagnosa)) {
-                ?>
-                <option value="<?php echo $p['iddiagnosa'] ?>" <?php echo ($p['iddiagnosa'] == $data['iddiagnosa']) ? 'selected' : ''; ?>><?php echo $p['kode_diagnosa']; ?>-<?php echo $p['nama_diagnosa'] ?></option>
-              <?php } ?>
-            </select>
+            <input type="text" class="form-control" value="<?= $diagnosa['nama_diagnosa']; ?>" name="" disabled>
           </div>
           <div class="mb-3">
             <label class="form-label">Kode Gejala</label>
-            <input type="text" class="form-control" value="<?= $data['kode_gejala']; ?>" name="kode_gejala">
+            <input type="text" class="form-control" value="<?= $data['kode_gejala']; ?>" name="kode_gejala" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Gejala</label>
@@ -90,9 +81,10 @@ if (isset($_POST['submit_gejala'])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Bobot</label>
-            <input type="text" class="form-control" value="<?= $data['bobot']; ?>" name="bobot">
+            <input type="number" class="form-control" value="<?= $data['bobot']; ?>" name="bobot" step="0.1" max="1">
           </div>
           <button type="submit" name="submit_gejala" class="btn btn-primary">Update</button>
+          <a href="gejala.php" class="btn btn-secondary">Kembali</a>
         </form>
       </div>
     </div>

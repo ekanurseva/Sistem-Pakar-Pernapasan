@@ -18,7 +18,7 @@
         <li class="active"><a href = "deteksi.php" style="font-size: 17px; text-decoration: none;">Mulai Deteksi</a></li>
         <li class=""><a href = "riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a></li>
         <li class=""><a href = "datadiri.php" style="font-size: 17px; text-decoration: none;">Data Diri</a></li>
-        <li class=""><a href = "keluar.php" style="font-size: 17px; text-decoration: none;">Keluar</a></li>
+        <li class=""><a href = "../keluar.php" style="font-size: 17px; text-decoration: none;">Keluar</a></li>
       </ul>
     </div>
     <div class="content text-center" style="width: 100%; margin-top:50px; margin-button:50px;">

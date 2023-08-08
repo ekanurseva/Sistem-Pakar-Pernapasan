@@ -7,14 +7,14 @@ if (isset($_GET['idgejala'])) {
         echo "
                 <script>
                     alert('Data Berhasil Dihapus');
-                    document.location.href='penyakit.php';
+                    document.location.href='gejala.php';
                 </script>
             ";
     } else {
         echo "
                 <script>
                     alert('Data Gagal Dihapus');
-                    document.location.href='penyakit.php';
+                    document.location.href='gejala.php';
                 </script>
             ";
     }

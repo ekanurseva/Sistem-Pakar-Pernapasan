@@ -1,13 +1,12 @@
 <?php
 include('konek.php');
-session_start();
 
 if (isset($_POST["submit"])) {
   $username = $_POST["username"];
   $password = $_POST["password"];
 
   //cek username apakah ada di database atau tidak
-  $result = mysqli_query($con, "SELECT * FROM user WHERE username = '$username'");
+  $result = mysqli_query($koneksi, "SELECT * FROM user WHERE username = '$username'");
 
   // mysqli_num_rows() untuk mengetahui ada berapa baris data yang dikembalikan
   if (mysqli_num_rows($result) === 1) {

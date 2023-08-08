@@ -1,20 +1,24 @@
 <?php
-include("konek.php");
+  include("konek.php");
 
+  $iddiagnosa = $_POST['diagnosa'];
+  $kode = get_kode_gejala($iddiagnosa);
 
-if (isset($_POST["submit_gejala"])) {
-  if (create_gejala($_POST) > 0) {
-    echo " 
-    <script>
-    alert('Data Gejala Berhasil Ditambah');
-    document.location.href='gejala.php';
-    </script>
-    ";
-  } else {
-    echo "<script>
-    alert('Data Gejala Gagal Ditambah');
-    </script>";
-  }
+  $data_diagnosa = query("SELECT * FROM diagnosa WHERE iddiagnosa = $iddiagnosa") [0];
+
+  if (isset($_POST["submit_gejala"])) {
+    if (create_gejala($_POST) > 0) {
+      echo " 
+      <script>
+      alert('Data Gejala Berhasil Ditambah');
+      document.location.href='gejala.php';
+      </script>
+      ";
+    } else {
+      echo "<script>
+      alert('Data Gejala Gagal Ditambah');
+      </script>";
+    }
 }
 ?>
 <html lang="en">
@@ -54,21 +58,14 @@ if (isset($_POST["submit_gejala"])) {
       <div class="container" style="padding-left: 35px; padding-right: 20px;">
         <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Insert Data Gejala</h1>
         <form action="" method="post">
+          <input type="hidden" name="diagnosa" id="" value="<?= $iddiagnosa; ?>">
           <div class="mb-3">
             <label class="form-label">Penyakit</label>
-            <select class="form-control" name="diagnosa" require>
-              <option value="">--Pilih Penyakit--</option>
-              <?php
-              $diagnosa = mysqli_query($koneksi, "SELECT * FROM diagnosa ORDER BY iddiagnosa DESC");
-              while ($p = mysqli_fetch_array($diagnosa)) {
-                ?>
-                <option value="<?php echo $p['iddiagnosa'] ?>"><?php echo $p['kode_diagnosa']; ?>-<?php echo $p['nama_diagnosa'] ?></option>
-              <?php } ?>
-            </select>
+            <input type="text" class="form-control" name="" disabled value="<?= $data_diagnosa['nama_diagnosa']; ?>">
           </div>
           <div class="mb-3">
             <label class="form-label">Kode Gejala</label>
-            <input type="text" class="form-control" name="kode_gejala">
+            <input type="text" class="form-control" name="kode_gejala" readonly value="<?= $kode; ?>">
           </div>
           <div class="mb-3">
             <label class="form-label">Gejala</label>
@@ -76,9 +73,10 @@ if (isset($_POST["submit_gejala"])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Bobot</label>
-            <input type="text" class="form-control" name="bobot">
+            <input type="number" class="form-control" name="bobot" step="0.1" max="1">
           </div>
           <button type="submit" name="submit_gejala" class="btn btn-primary">Submit</button>
+          <a href="gejala.php" class="btn btn-secondary">Kembali</a>
         </form>
       </div>
     </div>

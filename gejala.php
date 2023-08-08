@@ -1,8 +1,10 @@
 <?php
-include("konek.php");
-$data = query("SELECT * FROM gejala");
+  include("konek.php");
+  $data = query("SELECT * FROM gejala");
 
-$jumlah_gejala = jumlah_data("SELECT * FROM gejala");
+  $jumlah_gejala = jumlah_data("SELECT * FROM gejala");
+
+  $penyakit = query("SELECT * FROM diagnosa");
 
 ?>
 
@@ -50,7 +52,7 @@ $jumlah_gejala = jumlah_data("SELECT * FROM gejala");
           <div class="col-4">
             <div class="card" style="width: 15rem;">
               <div class="card-body">
-                <a class="card-title" href="inputgejala.php"><button>+</button> Insert Data Gejala</a>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Insert Data Gejala</button>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Gejala</h6>
                 <p class="card-text">
                   <?= $jumlah_gejala; ?>
@@ -111,6 +113,40 @@ $jumlah_gejala = jumlah_data("SELECT * FROM gejala");
         </div>
       </div>
     </div>
+
+    <!-- Modal Jawaban -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Pilih Penyakit</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <form action="inputgejala.php" method="post">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="kode_pertanyaan" class="form-label">Pilih penyakit sebelum memasukkan data gejala</label>
+                            
+                                    <div class="">
+                                        <select class="form-select" aria-label="Default select example" name="diagnosa">
+                                            <?php foreach ($penyakit as $p) : ?>
+                                                <option value="<?= $p['iddiagnosa']; ?>"><?= $p['nama_diagnosa']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Pilih</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Jawaban Selesai -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"

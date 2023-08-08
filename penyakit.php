@@ -56,7 +56,19 @@ $jumlah_penyakit = jumlah_data("SELECT * FROM diagnosa");
           <div class="col-4">
             <div class="card" style="width: 15rem;">
               <div class="card-body">
-                <a class="card-title" href="inputpenyakit.php"><button>+</button> Insert Data Penyakit dan Solusi</a>
+                <a class="card-title" href="inputpenyakit.php"><button>+</button> Insert Data Penyakit</a>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Data</h6>
+                <p class="card-text">
+                  <?= $jumlah_penyakit; ?>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card" style="width: 15rem;">
+              <div class="card-body">
+                <a class="card-title" href="inputsolusi.php"><button>+</button> Insert Data Solusi</a>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Data</h6>
                 <p class="card-text">
                   <?= $jumlah_penyakit; ?>
