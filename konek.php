@@ -283,6 +283,25 @@ function hapus_diagnosa($iddiagnosa)
     return mysqli_affected_rows($koneksi);
 }
 
+function create_solusi($data)
+{
+    global $koneksi;
+    $iddiagnosa = $data['iddiagnosa'];
+    $solusi = $data['solusi'];
+
+    $result = mysqli_query($koneksi, "SELECT solusi FROM solusi WHERE solusi = 'solusi'") or die(mysqli_error($koneksi));
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+            alert('Nama Penyakit Sudah Dipakai!');
+        </script>";
+        return false;
+    }
+
+    mysqli_query($koneksi, "INSERT INTO solusi VALUES (NULL, '$iddiagnosa', '$solusi')");
+
+    return mysqli_affected_rows($koneksi);
+}
+
 function create_gejala($data)
 {
     global $koneksi;
