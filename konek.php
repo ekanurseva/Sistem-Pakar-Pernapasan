@@ -557,16 +557,65 @@ function hapus_jawaban($idgejala)
         return $kode;
     }
 
-    function hitung($data) {
+    function hitung($data)
+    {
         global $koneksi;
 
         $data_penyakit = query("SELECT * FROM diagnosa");
+        $gejala = query("SELECT DISTINCT nama_gejala FROM gejala");
 
-        foreach($data_penyakit as $dp) {
+        // Ambil CF User
+        foreach ($gejala as $gej) {
+            $parameter = str_replace(" ", "_", $gej['nama_gejala']);
+            $nama_gejala[] = $parameter;
+
+            $jawaban = $data[$parameter];
+
+            $nilai = query("SELECT bobot FROM jawaban WHERE kode_jawaban = '$jawaban'")[0];
+
+            $nilai_cf_user[] = $nilai['bobot'];
+
+            echo "Nilai CF untuk " . $parameter . " adalah " . $nilai['bobot'] . "<br>";
+        }
+        echo "<br>";
+        // Ambil CF User Selesai
+
+        foreach ($data_penyakit as $dp) {
             $idpenyakit = $dp['iddiagnosa'];
             $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+            foreach($data_gejala as $dage) {
+                $kata = str_replace(" ", "_", $dage['nama_gejala']);
+                $indeks = array_search($kata, $nama_gejala);
 
-            var_dump($data_gejala);
-        } 
+                $hasil = $dage['bobot'] * $nilai_cf_user[$indeks];
+                ${"cf_he_" . $dp['kode_diagnosa']}[] = $hasil; 
+
+                echo "Hasil CF HE dari " . $dp['nama_diagnosa'] ." " . $dage['nama_gejala'] . " perkalian antara " .$dage['bobot'] . " dan " . $nilai_cf_user[$indeks] . " adalah ". $hasil . "<br>";
+
+            }
+            echo "<br>";
+
+            ${"cf_old_" . $dp['kode_diagnosa']. 0} = ${"cf_he_".$dp['kode_diagnosa']}[0];;
+            
+            for($j = 1; $j < count(${"cf_he_" . $dp['kode_diagnosa']}); $j++) {
+                ${"cf_old_" . $dp['kode_diagnosa'] . $j} = ${"cf_old_" . $dp['kode_diagnosa'] . $j - 1} + ${"cf_he_" . $dp['kode_diagnosa']}[$j] * (1 - ${"cf_old_" . $dp['kode_diagnosa'] . $j - 1});
+
+                ${"cf_old_" . $dp['kode_diagnosa']}[] = number_format(${"cf_old_" . $dp['kode_diagnosa'] . $j} * 100, 2);
+
+                echo "Hasil CF OLD ". $dp['kode_diagnosa'] . $j . " dari perkalian " . ${"cf_old_" . $dp['kode_diagnosa'] . $j - 1} . " + " . ${"cf_he_" . $dp['kode_diagnosa']}[$j] . " * (1 - " . ${"cf_old_" . $dp['kode_diagnosa'] . $j - 1} . ") adalah " . ${"cf_old_" . $dp['kode_diagnosa'] . $j} . "<br>";
+            }
+            echo "<br>";
+
+            ${"nilai_terbesar_" . $dp['kode_diagnosa']} = ${"cf_old_" . $dp['kode_diagnosa']}[0];
+
+            for ($o = 1; $o < count(${"cf_old_" . $dp['kode_diagnosa']}); $o++) {
+                if (${"cf_old_" . $dp['kode_diagnosa']}[$o] > ${"nilai_terbesar_" . $dp['kode_diagnosa']}) {
+                    ${"nilai_terbesar_" . $dp['kode_diagnosa']} = ${"cf_old_" . $dp['kode_diagnosa']}[$o];
+                }
+            }
+            echo "Nilai terbesar dari " . $dp['kode_diagnosa'] . " adalah ". ${"nilai_terbesar_" . $dp['kode_diagnosa']} . "%<br><br>";
+
+
+        }
     }
 ?>
