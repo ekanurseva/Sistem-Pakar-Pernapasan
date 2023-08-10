@@ -45,7 +45,7 @@
     <div class="content" style="width:80%;">
       <div class="container">
         <div class="head">
-          <h1 style="text-align: center; margin-top:45px; margin-button:45px;">Data Gejala</h1>
+          <h1 style="text-align: center; margin-top:45px; margin-buttom:45px;">Data Gejala</h1>
           <!-- <img src="img/dokter.png" style="width:200px; possition:absolute;" alt=""> -->
         </div>
         <div class="row align-items-start text-center">

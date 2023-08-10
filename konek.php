@@ -556,4 +556,17 @@ function hapus_jawaban($idgejala)
 
         return $kode;
     }
+
+    function hitung($data) {
+        global $koneksi;
+
+        $data_penyakit = query("SELECT * FROM diagnosa");
+
+        foreach($data_penyakit as $dp) {
+            $idpenyakit = $dp['iddiagnosa'];
+            $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+
+            var_dump($data_gejala);
+        } 
+    }
 ?>

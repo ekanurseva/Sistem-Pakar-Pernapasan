@@ -1,3 +1,21 @@
+<?php 
+  require_once '../konek.php';
+
+  $jumlah_pertanyaan = jumlah_data("SELECT DISTINCT nama_gejala FROM gejala");
+
+  $jumper1 = ceil($jumlah_pertanyaan / 2);
+  $jumper2 = $jumlah_pertanyaan - $jumper1;
+
+  $pertanyaan1 = query("SELECT DISTINCT nama_gejala FROM gejala LIMIT $jumper1");
+  $pertanyaan2 = query("SELECT DISTINCT nama_gejala FROM gejala LIMIT $jumper2 OFFSET $jumper1");
+
+  $jawaban = query("SELECT * FROM jawaban");
+
+  if(isset($_POST['submit'])) {
+    hitung($_POST);
+  }
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +42,7 @@
     <div class="content" style="width:80%;">
     <div class="container" style="padding-left: 35px; padding-right: 20px;">
       <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Deteksi Diagnosis Penyakit Saluran Pernapasan</h1>
-      <form>
+      <form action="" method="post">
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Nama</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
@@ -36,62 +54,46 @@
         <h5 >Silahkan Menjawab Pertanyaan ini untuk Mendapatkan Hasil Deteksi dan Solusi</h5>
         <div class="row">
             <div class="col-6">
-                <h6>1. Apakah....?</h6>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Sangat Sering
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                <label class="form-check-label" for="flexCheckChecked">
-                    Sering
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Jarang
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Tidak Pernah
-                </label>
-                </div>
+              <?php 
+                $i = 1;
+                foreach($pertanyaan1 as $p1) : 
+              ?>
+                <h6><?= $i; ?>. <?= $p1['nama_gejala']; ?></h6>
+                <?php foreach($jawaban as $jawab) : ?>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" value="<?= $jawab['kode_jawaban']; ?>" id="<?= $jawab['kode_jawaban'].$p1['nama_gejala']; ?>" name="<?= $p1['nama_gejala']; ?>">
+                    <label class="form-check-label" for="<?= $jawab['kode_jawaban'].$p1['nama_gejala']; ?>">
+                        <?= $jawab['jawaban']; ?>
+                    </label>
+                  </div>
+              <?php 
+                  endforeach;
+                $i++;
+                endforeach; 
+              ?>
             </div>
+
             <div class="col-6">
-                <h6>2. Apakah ......?</h6>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Sangat Sering
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                <label class="form-check-label" for="flexCheckChecked">
-                    Sering
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Jarang
-                </label>
-                </div>
-                <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                <label class="form-check-label" for="flexCheckDefault">
-                    Tidak Pernah
-                </label>
-                </div>
+              <?php 
+                foreach($pertanyaan2 as $p2) : 
+              ?>
+                <h6><?= $i; ?>. <?= $p2['nama_gejala']; ?></h6>
+                <?php foreach($jawaban as $jawab) : ?>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" value="<?= $jawab['kode_jawaban']; ?>" id="<?= $jawab['kode_jawaban'].$p2['nama_gejala']; ?>" name="<?= $p2['nama_gejala']; ?>">
+                    <label class="form-check-label" for="<?= $jawab['kode_jawaban'].$p2['nama_gejala']; ?>">
+                        <?= $jawab['jawaban']; ?>
+                    </label>
+                  </div>
+              <?php 
+                  endforeach;
+                $i++;
+                endforeach; 
+              ?>
             </div>
         </div>
         <a href="hasil.php">
-        <button type="submit" style="margin-left: 80%" class="btn btn-primary mt-5">Submit</button>
+          <button type="submit" style="margin-left: 80%" class="btn btn-primary mt-5" name="submit">Submit</button>
         </a>
       </form>
     </div>
