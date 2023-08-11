@@ -1,18 +1,10 @@
 <?php
 include("konek.php");
 
-$iduser = $_GET['id'];
-
-$data = query("SELECT * FROM user WHERE iduser = $iduser")[0];
-
-if ($data['jk'] == "L") {
-  $jk = "Laki-Laki";
-} else {
-  $jk = "Perempuan";
-}
+$data = query("SELECT * FROM user WHERE iduser");
 
 if (isset($_POST['submit_profil'])) {
-  if (edit_pengguna($_POST) > 0) {
+  if (profil($_POST) > 0) {
     echo "
                 <script>
                 alert('Data Berhasil Diubah');
@@ -67,9 +59,9 @@ if (isset($_POST['submit_profil'])) {
     <div class="content" style="width:80%;">
       <div class="container" style="padding-left: 35px; padding-right: 20px;">
         <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Data Diri</h1>
-        <form>
+        <form action="" method="post">
           <div class="profil text-center mt-4">
-            <img src="img/admin.png" alt="" style="width:100px;">
+            <img src="img/<?= $data['foto']; ?>" alt="" style="width:100px;">
             <div class="mb-3 mt-2">
               <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile">
             </div>
@@ -122,12 +114,7 @@ if (isset($_POST['submit_profil'])) {
       integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
       crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script>
-      $(".sidebar ul li").on('click', function () {
-        $(".sidebar ul li.active").removeClass("active")
-        $(this).addClass("active");
-      })
-    </script>
+
 </body>
 
 </html>

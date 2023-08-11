@@ -94,14 +94,6 @@ if (isset($_POST['submit'])) {
             <input type="email" class="form-control" value="<?= $data['email']; ?>" name="email">
           </div>
           <div class="mb-3">
-            <label class="form-label">Telepon</label>
-            <input type="text" class="form-control" value="<?= $data['telepon']; ?>" name="telepon">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Tanggal Lahir</label>
-            <input type="date" class="form-control" value="<?= $data['tgl_lahir']; ?>" name="tgl_lahir">
-          </div>
-          <div class="mb-3">
             <label class="form-label">Jenis Kelamin</label>
             <select class="form-select" name="jk" aria-label="Default select example" name="jk">
               <option selected hidden>

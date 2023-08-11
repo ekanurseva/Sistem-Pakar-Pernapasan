@@ -18,8 +18,6 @@ if (isset($_POST["submit"])) {
     if (password_verify($password, $row["password"])) {
       $enkripsi = enkripsi($row['iduser']);
 
-      setcookie('pernapasan', $enkripsi, time() + 10800);
-      // setcookie('role', hash('ripemd160', $row['rolename']), time()+10800);
       if ($row["level"] === "admin") {
         echo "<script>
                   document.location.href='admin.php';

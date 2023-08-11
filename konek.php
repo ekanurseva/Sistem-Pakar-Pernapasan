@@ -54,6 +54,57 @@ function enkripsi($teks)
 
     return $enkripsi;
 }
+
+// Fungsi Upload Foto
+function uploadFoto()
+{
+    $namaFile = $_FILES['foto']['name'];
+    $ukuranFile = $_FILES['foto']['size'];
+    $tmpName = $_FILES['foto']['tmp_name'];
+
+    // Cek apakah ada gambar yang diupload atau tidak
+    if ($namaFile != "") {
+        //cek apakah yang di upload gambar atau bukan
+        $validFoto = ['jpg', 'jpeg', 'png'];
+        $kesesuaianFoto = explode('.', $namaFile);
+        $kesesuaianFoto = strtolower(end($kesesuaianFoto));
+
+        //cek apakah ekstensinya ada atau tidak di dalam array $validFoto
+        if (!in_array($kesesuaianFoto, $validFoto)) {
+            echo "<script>
+                    alert('Periksa Kembali File yang Anda Upload');
+                    </script>";
+            return false;
+        }
+    }
+
+
+    //cek jika ukurannya terlalu besar, ukurannya dalam byte
+    if ($ukuranFile > 5000000) {
+        echo "<script>
+                alert('Ukuran gambar terlalu besar, jangan melebihi 5mb');
+                </script>";
+        return false;
+    }
+
+    //generate nama gambar baru
+    if ($namaFile != "") {
+        $namaFileBaru = uniqid();
+        $namaFileBaru .= '.';
+        $namaFileBaru .= $kesesuaianFoto;
+        //parameternya file namenya, lalu tujuannya
+        move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+        move_uploaded_file($tmpName, 'img/' . $namaFileBaru);
+
+        return $namaFileBaru;
+    } else {
+        $namaFileBaru = "";
+
+        return $namaFileBaru;
+    }
+}
+// Fungsi Upload Foto Selesai
+
 function register($data)
 {
     global $koneksi;
@@ -63,9 +114,11 @@ function register($data)
     $nama = $data['nama'];
     $jk = $data['jk'];
     $email = $data['email'];
-    $telepon = $data['telepon'];
     $level = "user";
-    $tgl_lahir = $data['tgl_lahir'];
+    $foto = uploadFoto();
+    if ($foto == "") {
+        $foto = "admin.png";
+    }
 
     $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = 'username'") or die(mysqli_error($koneksi));
     if (mysqli_fetch_assoc($result)) {
@@ -82,7 +135,7 @@ function register($data)
     }
     $password = password_hash($password2, PASSWORD_DEFAULT);
 
-    mysqli_query($koneksi, "INSERT INTO user VALUES ('NULL', '$username', '$password', '$nama', '$jk', '$email', '$telepon', '$level', '$tgl_lahir')");
+    mysqli_query($koneksi, "INSERT INTO user VALUES ('NULL', '$username', '$password', '$nama', '$jk', '$email', '$level', '$foto')");
 
     return mysqli_affected_rows($koneksi);
 }
@@ -96,9 +149,11 @@ function register_admin($data)
     $nama = $data['nama'];
     $jk = $data['jk'];
     $email = $data['email'];
-    $telepon = $data['telepon'];
     $level = "admin";
-    $tgl_lahir = $data['tgl_lahir'];
+    $foto = uploadFoto();
+    if ($foto == "") {
+        $foto = "admin.png";
+    }
 
     $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = 'username'") or die(mysqli_error($koneksi));
     if (mysqli_fetch_assoc($result)) {
@@ -115,7 +170,7 @@ function register_admin($data)
     }
     $password = password_hash($password2, PASSWORD_DEFAULT);
 
-    mysqli_query($koneksi, "INSERT INTO user VALUES ('NULL', '$username', '$password', '$nama', '$jk', '$email', '$telepon', '$level', '$tgl_lahir')");
+    mysqli_query($koneksi, "INSERT INTO user VALUES ('NULL', '$username', '$password', '$nama', '$jk', '$email', '$level', '$foto')");
 
     return mysqli_affected_rows($koneksi);
 }
@@ -127,6 +182,7 @@ function edit_pengguna($data)
     $iduser = $data['iduser'];
     $oldusername = $data['oldusername'];
     $oldpassword = $data['oldpassword'];
+    $oldfoto = $data['oldfoto'];
     $oldemail = $data['oldemail'];
     $username = strtolower(stripslashes($data["username"]));
     $password = mysqli_real_escape_string($koneksi, $data["password"]);
@@ -134,8 +190,10 @@ function edit_pengguna($data)
     $nama = $data['nama'];
     $jk = $data['jk'];
     $email = htmlspecialchars($data['email']);
-    $telepon = $data['telepon'];
-    $tgl_lahir = $data['tgl_lahir'];
+    $foto = uploadFoto();
+    if ($foto == "") {
+        $foto = $oldfoto;
+    }
 
     if (isset($data['oldlevel'])) {
         $level = $data['oldlevel'];
@@ -177,15 +235,101 @@ function edit_pengguna($data)
         }
     }
 
+
+    if ($foto != $oldfoto && $oldfoto != "admin.png") {
+        unlink("img/$oldfoto");
+        unlink("../img/$oldfoto");
+    }
+
     $query = "UPDATE user SET 
                 username = '$username',
                 password = '$password',
                 nama = '$nama',
                 jk = '$jk',
                 email = '$email',
-                telepon = '$telepon',
                 level = '$level',
-                tgl_lahir = '$tgl_lahir'
+                foto = '$foto'
+              WHERE iduser = '$iduser'
+            ";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
+function profil($data)
+{
+    global $koneksi;
+
+    $iduser = $data['iduser'];
+    $oldusername = $data['oldusername'];
+    $oldpassword = $data['oldpassword'];
+    $oldfoto = $data['oldfoto'];
+    $oldemail = $data['oldemail'];
+    $username = strtolower(stripslashes($data["username"]));
+    $password = mysqli_real_escape_string($koneksi, $data["password"]);
+    $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
+    $nama = $data['nama'];
+    $jk = $data['jk'];
+    $email = htmlspecialchars($data['email']);
+    $foto = uploadFoto();
+    if ($foto == "") {
+        $foto = $oldfoto;
+    }
+
+    if (isset($data['oldlevel'])) {
+        $level = $data['oldlevel'];
+    } else {
+        $level = $data['level'];
+    }
+
+
+    if ($username !== $oldusername) {
+        $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
+                alert('Username Sudah Dipakai!');
+            </script>";
+            return false;
+        }
+    }
+
+    if ($password !== $oldpassword) {
+        if ($password !== $password2) {
+            echo "<script>
+                    alert('Password Tidak Sesuai!');
+                  </script>";
+            return false;
+        }
+
+        $password = password_hash($password2, PASSWORD_DEFAULT);
+    }
+
+    if ($email !== $oldemail) {
+        $result = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'");
+
+        if (mysqli_fetch_assoc($result)) {
+            echo "<script>
+                    alert('Email sudah digunakan, silahkan pakai email lain');
+                  </script>";
+            return false;
+        }
+    }
+
+
+    if ($foto != $oldfoto && $oldfoto != "admin.png") {
+        unlink("img/$oldfoto");
+        unlink("../img/$oldfoto");
+    }
+
+    $query = "UPDATE user SET 
+                username = '$username',
+                password = '$password',
+                nama = '$nama',
+                jk = '$jk',
+                email = '$email',
+                level = '$level',
+                foto = '$foto'
               WHERE iduser = '$iduser'
             ";
     mysqli_query($koneksi, $query);
@@ -298,6 +442,32 @@ function create_solusi($data)
     }
 
     mysqli_query($koneksi, "INSERT INTO solusi VALUES (NULL, '$iddiagnosa', '$solusi')");
+
+    return mysqli_affected_rows($koneksi);
+}
+
+function edit_solusi($data)
+{
+    global $koneksi;
+
+    $idsolusi = $data['idsolusi'];
+    $iddiagnosa = $data['iddiagnosa'];
+    $solusi = $data['solusi'];
+
+    $query = "UPDATE solusi SET 
+                iddiagnosa = '$iddiagnosa',
+                solusi = '$solusi'
+              WHERE idsolusi = '$idsolusi'
+              ";
+    mysqli_query($koneksi, $query);
+
+    return mysqli_affected_rows($koneksi);
+}
+
+function hapus_solusi($idsolusi)
+{
+    global $koneksi;
+    mysqli_query($koneksi, "DELETE FROM solusi WHERE idsolusi = $idsolusi");
 
     return mysqli_affected_rows($koneksi);
 }
@@ -525,48 +695,67 @@ function hapus_jawaban($idgejala)
     return mysqli_affected_rows($koneksi);
 }
 
-    function get_kode_gejala($diagnosis){
-        global $koneksi;
-        $data_diagnosis = query("SELECT kode_diagnosa FROM diagnosa WHERE iddiagnosa = $diagnosis") [0];
-        $kode_diagnosa = $data_diagnosis['kode_diagnosa'];
+function get_kode_gejala($diagnosis)
+{
+    global $koneksi;
+    $data_diagnosis = query("SELECT kode_diagnosa FROM diagnosa WHERE iddiagnosa = $diagnosis")[0];
+    $kode_diagnosa = $data_diagnosis['kode_diagnosa'];
 
-        $query = "SELECT * FROM gejala WHERE iddiagnosa = $diagnosis";
-        $kode = "";
+    $query = "SELECT * FROM gejala WHERE iddiagnosa = $diagnosis";
+    $kode = "";
 
-        $jumlah = jumlah_data($query);
+    $jumlah = jumlah_data($query);
 
-        if($jumlah == 0) {
-            $kode = $kode_diagnosa . "1";
-        } else {
-            for($i = 1; $i <= $jumlah; $i++) { 
-                $query1 = "SELECT COUNT(*) as total FROM gejala WHERE kode_gejala = '$kode_diagnosa{$i}'";
-                $result = mysqli_query($koneksi, $query1);
-                $row = mysqli_fetch_assoc($result);
-                $totalP = $row['total'];
+    if ($jumlah == 0) {
+        $kode = $kode_diagnosa . "1";
+    } else {
+        for ($i = 1; $i <= $jumlah; $i++) {
+            $query1 = "SELECT COUNT(*) as total FROM gejala WHERE kode_gejala = '$kode_diagnosa{$i}'";
+            $result = mysqli_query($koneksi, $query1);
+            $row = mysqli_fetch_assoc($result);
+            $totalP = $row['total'];
 
-                if ($totalP == 0) {
-                    $kode = $kode_diagnosa . $i;
-                    break;
-                } else {
-                    $angka = $jumlah + 1;
-                    $kode = $kode_diagnosa . $angka;
-                }
-            };
+            if ($totalP == 0) {
+                $kode = $kode_diagnosa . $i;
+                break;
+            } else {
+                $angka = $jumlah + 1;
+                $kode = $kode_diagnosa . $angka;
+            }
         }
-
-        return $kode;
+        ;
     }
 
-    function hitung($data) {
-        global $koneksi;
+    return $kode;
+}
 
-        $data_penyakit = query("SELECT * FROM diagnosa");
+function hitung($data)
+{
+    global $koneksi;
 
-        foreach($data_penyakit as $dp) {
-            $idpenyakit = $dp['iddiagnosa'];
-            $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+    $data_penyakit = query("SELECT * FROM diagnosa");
+    $gejala = query("SELECT DISTINCT nama_gejala FROM gejala");
 
-            var_dump($data_gejala);
-        } 
+    // Ambil CF User
+    foreach ($gejala as $gej) {
+        $parameter = str_replace(" ", "_", $gej['nama_gejala']);
+        $nama_gejala[] = $parameter;
+
+        $jawaban = $data[$parameter];
+
+        $nilai = query("SELECT bobot FROM jawaban WHERE kode_jawaban = '$jawaban'")[0];
+
+        $nilai_cf_user[] = $nilai['bobot'];
+
+        echo "Nilai CF untuk " . $parameter . " adalah " . $nilai['bobot'] . "<br>";
     }
+    // Ambil CF User Selesai
+
+    foreach ($data_penyakit as $dp) {
+        $idpenyakit = $dp['iddiagnosa'];
+        $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+
+        var_dump($data_gejala);
+    }
+}
 ?>

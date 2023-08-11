@@ -1,7 +1,5 @@
 <?php
 include("konek.php");
-$data_pertanyaan = query("SELECT * FROM pertanyaan");
-$jumlah_pertanyaan = jumlah_data("SELECT * FROM pertanyaan");
 
 $data_jawaban = query("SELECT * FROM jawaban");
 $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");
@@ -48,25 +46,7 @@ $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");
           <h1 style="text-align: center; margin-top:45px; margin-button:45px;">Pertanyaan dan Jawaban</h1>
           <!-- <img src="img/dokter.png" style="width:200px; possition:absolute;" alt=""> -->
         </div>
-        <div class="col-7">
-          <form style="margin-top: 40px;" class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-        <div class="row align-items-start text-center">
-          <div class="col-4">
-            <div class="card" style="width: 15rem;">
-              <div class="card-body">
-                <a class="card-title" href="inputpertanyaan.php"><button>+</button> Insert Data Pertanyaan</a>
-                <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Pertanyaan</h6>
-                <p class="card-text">
-                  <?= $jumlah_pertanyaan; ?>
-                </p>
-              </div>
-            </div>
-          </div>
-
+        <div class="row mt-4 align-items-start text-center">
           <div class="col-4">
             <div class="card" style="width: 15rem;">
               <div class="card-body">
@@ -83,54 +63,6 @@ $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");
             <thead>
               <tr>
                 <th scope="col">No</th>
-                <th scope="col">Pertanyaan</th>
-                <th scope="col">Kode Pertanyaan</th>
-                <th scope="col">Kode Gejala</th>
-                <th scope="col">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              $i = 1;
-              foreach ($data_pertanyaan as $pt):
-                ?>
-                <tr>
-                  <th>
-                    <?php echo $i; ?>
-                  </th>
-                  <td>
-                    <?php echo $pt['pertanyaan']; ?>
-                  </td>
-                  <td>
-                    <?php echo $pt['kode_pertanyaan']; ?>
-                  </td>
-
-                  <?php
-                  $idgejala = $pt['idgejala'];
-                  $kode_gejala = query("SELECT kode_gejala FROM gejala WHERE idgejala = $idgejala")[0];
-                  ?>
-                  <td>
-                    <?= $kode_gejala['kode_gejala']; ?>
-                  </td>
-                  <td>
-                    <a style="text-decoration: none;" href="editpertanyaan.php?id=<?= $pt['idpertanyaan']; ?> ">Edit </a>
-                    |
-                    <a style="text-decoration: none;"
-                      href="delete_pertanyaan.php?idpertanyaan=<?= $pt['idpertanyaan']; ?>"
-                      onclick="return confirm('Apakah anda yakin ingin menghapus data?')">Hapus</a>
-                  </td>
-                </tr>
-                <?php
-                $i++;
-              endforeach
-              ?>
-            </tbody>
-          </table>
-
-          <table class="table mt-3" id="example2">
-            <thead>
-              <tr>
-                <th scope="col">No</th>
                 <th scope="col">Jawaban</th>
                 <th scope="col">Kode Jawaban</th>
                 <th scope="col">Bobot</th>
@@ -139,7 +71,8 @@ $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");
             </thead>
             <tbody>
               <?php
-              $j = 1; foreach ($data_jawaban as $jb):
+              $j = 1;
+              foreach ($data_jawaban as $jb):
                 ?>
                 <tr>
                   <th>
@@ -179,9 +112,6 @@ $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");
     <script>
       $(document).ready(function () {
         $("#example").DataTable();
-      });
-      $(document).ready(function () {
-        $("#example2").DataTable();
       });
 
       $(".sidebar ul li").on('click', function () {

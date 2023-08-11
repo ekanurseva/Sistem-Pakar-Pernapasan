@@ -47,13 +47,7 @@ $jumlah_user = jumlah_data("SELECT * FROM user WHERE level = 'user'");
           <h1 style="text-align: center; margin-top:45px; margin-button:45px;">Data Pengguna</h1>
           <!-- <img src="img/dokter.png" style="width:200px; possition:absolute;" alt=""> -->
         </div>
-        <div class="col-7">
-          <form style="margin-top: 40px;" class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-        <div class="row align-items-start text-center">
+        <div class="row mt-4 align-items-start text-center">
           <div class="col-4">
             <div class="card" style="width: 15rem;">
               <div class="card-body">

@@ -7,19 +7,19 @@ $data = query("SELECT * FROM jawaban WHERE idjawaban = $idjawaban")[0];
 
 if (isset($_POST['submit_jawaban'])) {
   if (edit_jawaban($_POST) > 0) {
-    // echo "
-    //             <script>
-    //             alert('Data Berhasil Diubah');
-    //             document.location.href='pertanyaan.php';
-    //             </script>
-    //         ";
+    echo "
+                <script>
+                alert('Data Berhasil Diubah');
+                document.location.href='pertanyaan.php';
+                </script>
+            ";
   } else {
-    // echo "
-    //             <script>
-    //             alert('Data Gagal Diubah');
-    //             document.location.href='pertanyaan.php';
-    //             </script>
-    //         ";
+    echo "
+                <script>
+                alert('Data Gagal Diubah');
+                document.location.href='pertanyaan.php';
+                </script>
+            ";
   }
 }
 

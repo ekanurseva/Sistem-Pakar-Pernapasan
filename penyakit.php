@@ -46,7 +46,7 @@ $jumlah_solusi = jumlah_data("SELECT * FROM solusi");
       <div class="container">
         <div class="head">
           <h1 style="text-align: center; margin-top:45px; margin-button:45px;">Penyakit dan Solusi</h1>
-          <!-- <img src="img/dokter.png" style="width:200px; possition:absolute;" alt=""> -->
+
         </div>
         <div class="col-7">
         </div>
@@ -68,7 +68,7 @@ $jumlah_solusi = jumlah_data("SELECT * FROM solusi");
                 <a class="card-title" href="inputsolusi.php"><button>+</button> Insert Data Solusi</a>
                 <h6 class="card-subtitle mb-2 text-body-secondary">Jumlah Data</h6>
                 <p class="card-text">
-                  <?= $jumlah_solusi; ?>
+                  <?php echo $jumlah_solusi; ?>
                 </p>
               </div>
             </div>
@@ -126,17 +126,21 @@ $jumlah_solusi = jumlah_data("SELECT * FROM solusi");
             </thead>
             <tbody>
               <?php
-              $j = 1; foreach ($data as $s):
+              $j = 1; foreach ($data_solusi as $s):
                 ?>
                 <tr>
                   <th>
                     <?= $j; ?>
                   </th>
+                  <?php
+                  $iddiagnosa = $s['iddiagnosa'];
+                  $nama_diagnosa = query("SELECT nama_diagnosa FROM diagnosa WHERE iddiagnosa = $iddiagnosa")[0];
+                  ?>
                   <td>
-                    <?= $s['nama_diagnosa']; ?>
+                    <?= $nama_diagnosa['nama_diagnosa']; ?>
                   </td>
                   <td>
-                    <?= $s['solusi']; ?>
+                    <?php echo $s['solusi']; ?>
                   </td>
                   <td>
                     <a style="text-decoration: none;" href="editsolusi.php?id=<?= $s['idsolusi']; ?> ">Edit </a>
@@ -167,10 +171,6 @@ $jumlah_solusi = jumlah_data("SELECT * FROM solusi");
       $(document).ready(function () {
         $("#example2").DataTable();
       });
-      $(".sidebar ul li").on('click', function () {
-        $(".sidebar ul li.active").removeClass("active")
-        $(this).addClass("active");
-      })
     </script>
 </body>
 

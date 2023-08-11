@@ -59,14 +59,6 @@ if (isset($_POST["submit_user"])) {
                                 <input name="password2" type="password" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">Telepon</label>
-                                <input name="telepon" type="text" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">Tanggal lahir</label>
-                                <input name="tgl_lahir" type="date" class="form-control">
-                            </div>
-                            <div class="mb-3">
                                 <label class="form-label">Jenis Kelamin</label>
                                 <select class="form-select" name="jk" aria-label="Default select example">
                                     <option selected>Pilih Jenis Kelamin</option>
@@ -80,18 +72,15 @@ if (isset($_POST["submit_user"])) {
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-                    crossorigin="anonymous"></script>
-                <script type="text/javascript"
-                    src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-                <script>
-                    $(".sidebar ul li").on('click', function () {
-                        $(".sidebar ul li.active").removeClass("active")
-                        $(this).addClass("active");
-                    })
-                </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
 </body>
 
 </html>
