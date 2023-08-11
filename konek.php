@@ -55,6 +55,55 @@ function enkripsi($teks)
     return $enkripsi;
 }
 
+function validasi() {
+    global $koneksi;
+    if (!isset($_COOKIE['pernapasan'])) {
+        echo "<script>
+                document.location.href='logout.php';
+              </script>";
+        exit;
+    }
+    
+    $id = dekripsi($_COOKIE['pernapasan']);
+    
+    $result = mysqli_query($koneksi, "SELECT * FROM user WHERE iduser = '$id'");
+    
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='logout.php';
+              </script>";
+        exit;
+    }
+}
+
+function validasi_admin() {
+    global $koneksi;
+    if (!isset($_COOKIE['pernapasan'])) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+    
+    $id = dekripsi($_COOKIE['pernapasan']);
+
+    $cek = query("SELECT * FROM user WHERE iduser = $id") [0];
+    
+    $result = mysqli_query($koneksi, "SELECT * FROM user WHERE iduser = '$id'");
+
+    if (mysqli_num_rows($result) !== 1) {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    } elseif($cek['role'] !== "Admin") {
+        echo "<script>
+                document.location.href='../logout.php';
+              </script>";
+        exit;
+    }
+}
+
 // Fungsi Upload Foto
 function uploadFoto()
 {
@@ -725,6 +774,7 @@ function get_kode_gejala($diagnosis)
         }
         ;
     }
+}
 
     function hitung($data)
     {
@@ -787,14 +837,63 @@ function get_kode_gejala($diagnosis)
 
 
         }
+        foreach ($data_penyakit as $dp) {
+            $idpenyakit = $dp['iddiagnosa'];
+            $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+    
+            var_dump($data_gejala);
+        }
     }
     // Ambil CF User Selesai
 
-    foreach ($data_penyakit as $dp) {
-        $idpenyakit = $dp['iddiagnosa'];
-        $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+    function update_datadiri($data) {
+        global $koneksi;
+        $iduser = $data['iduser'];
+        $oldusername = $data['oldusername'];
+        $oldpassword = $data['oldpassword'];
+        $nama = $data['nama'];
+        $username = $data['username'];
+        $email = $data['email'];
+        $password = $data['password'];
+        $password2 = $data['password2'];
+        $jk = $data['jk'];
 
-        var_dump($data_gejala);
+        if($username !== $oldusername) {
+            $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'");
+
+            if (mysqli_fetch_assoc($result)) {
+                echo "
+                    <script>
+                        alert('Username sudah digunakan');
+                        document.location.href='datadiri.php';
+                    </script>
+                ";
+                exit();
+            }
+        }
+
+        if($password !== $oldpassword) {
+            if ($password !== $password2) {
+                echo "<script>
+                        alert('Password tidak sesuai!');
+                        document.location.href='datadiri.php';
+                      </script>";
+                exit();
+            }
+
+            $password = password_hash($password2, PASSWORD_DEFAULT);
+        }
+
+        $query = "UPDATE user SET 
+                    username = '$username',
+                    password = '$password',
+                    nama = '$nama',
+                    jk = '$jk',
+                    email = '$email'
+                  WHERE iduser = '$iduser'
+                ";
+        mysqli_query($koneksi, $query);
+
+        return mysqli_affected_rows($koneksi);
     }
-}
 ?>

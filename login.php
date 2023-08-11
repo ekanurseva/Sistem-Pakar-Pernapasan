@@ -17,17 +17,18 @@ if (isset($_POST["submit"])) {
     //parameternya yaitu string yang belum diacak dan string yang sudah diacak
     if (password_verify($password, $row["password"])) {
       $enkripsi = enkripsi($row['iduser']);
+      setcookie('pernapasan', $enkripsi, time() + 10800);
 
       if ($row["level"] === "admin") {
-        // echo "<script>
-        //           document.location.href='admin.php';
-        //       </script>";
+        echo "<script>
+                  document.location.href='admin.php';
+              </script>";
         exit;
       } elseif ($row["level"] === "user") {
-        // echo "<script>
-        //           document.location.href='user';
-        //       </script>";
-        // exit;
+        echo "<script>
+                  document.location.href='user';
+              </script>";
+        exit;
       }
     }
   }

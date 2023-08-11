@@ -1,3 +1,10 @@
+<?php
+  require_once '../konek.php';
+  $id = dekripsi($_COOKIE['pernapasan']);
+
+  $data_diri = query("SELECT * FROM user WHERE iduser = $id") [0];
+ ?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +18,7 @@
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-      <img src="../img/admin.png" style = "width:50px; margin-right: auto; margin-left: auto; display:block" alt=""> <h5 class="offcanvas-title fw-bold text-center" style = "font-size: 20px" id="offcanvasLabel">USER</h5>
+      <img src="../img/admin.png" style = "width:50px; margin-right: auto; margin-left: auto; display:block" alt=""> <h5 class="offcanvas-title fw-bold text-center" style = "font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
       </div>
       <ul class="">
         <li class="active"><a style="font-size: 17px; text-decoration: none;"href = "index.php" >Dashboard</a></li>
