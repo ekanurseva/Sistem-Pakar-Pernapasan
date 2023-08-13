@@ -799,9 +799,12 @@ function get_kode_gejala($diagnosis)
         echo "<br>";
         // Ambil CF User Selesai
 
+        
         foreach ($data_penyakit as $dp) {
             $idpenyakit = $dp['iddiagnosa'];
             $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
+            
+            // Perhitungan Certainty Factor
             foreach ($data_gejala as $dage) {
                 $kata = str_replace(" ", "_", $dage['nama_gejala']);
                 $indeks = array_search($kata, $nama_gejala);
@@ -834,17 +837,65 @@ function get_kode_gejala($diagnosis)
                 }
             }
             echo "Nilai terbesar dari " . $dp['kode_diagnosa'] . " adalah " . ${"nilai_terbesar_" . $dp['kode_diagnosa']} . "%<br><br>";
+            // Perhitungan certainty factor selesai
 
 
+            // Perhitungan Naive Bayes
+            ${"sigma_" . $dp['kode_diagnosa']} = 0;
+            ${"p_h_" . $dp['kode_diagnosa'] . "xh_" . $dp['kode_diagnosa']} = 0;
+
+            foreach($data_gejala as $dg) {
+                echo "Nilai Hi dari " . $dp['nama_diagnosa'] . " ke " . $dg['kode_gejala'] . " adalah " . $dg['bobot'] . "<br>";
+                ${"sigma_" . $dp['kode_diagnosa']} += $dg['bobot'];
+            }
+
+            echo "Nilai sigma H dari " . $dp['nama_diagnosa'] . " adalah " . ${"sigma_" . $dp['kode_diagnosa']} . "<br><br>";
+
+            foreach($data_gejala as $dala) {
+                ${"h_" . $dala['kode_gejala']} = $dala['bobot'] / ${"sigma_" . $dp['kode_diagnosa']};
+
+                echo "Nilai P(H)". $dala['kode_gejala'] . " hasil dari " . $dala['bobot'] . " / " . ${"sigma_" . $dp['kode_diagnosa']} . " adalah " . ${"h_" . $dala['kode_gejala']}  . "<br>";
+
+                $kata2 = str_replace(" ", "_", $dala['nama_gejala']);
+                $indeks2 = array_search($kata2, $nama_gejala);
+
+                $hitung2 = $nilai_cf_user[$indeks2] * ${"h_" . $dala['kode_gejala']};
+
+                echo "Hasil dari P(E|H)". $dala['kode_gejala'] . " x P(H)" . $dala['kode_gejala'] . " yaitu " . $nilai_cf_user[$indeks2] . " x " . ${"h_" . $dala['kode_gejala']} . " adalah " . $hitung2 . "<br><br>";
+
+                ${"p_h_" . $dp['kode_diagnosa'] . "xh_" . $dp['kode_diagnosa']} += $hitung2;
+            }
+
+            echo "Hasil dari P(E|H)". $dp['kode_diagnosa'] . " x P(H)" . $dp['kode_diagnosa'] . " adalah " . ${"p_h_" . $dp['kode_diagnosa'] . "xh_" . $dp['kode_diagnosa']} . "<br><br>";
+
+            foreach($data_gejala as $tala) {
+                $kata3 = str_replace(" ", "_", $tala['nama_gejala']);
+                $indeks3 = array_search($kata3, $nama_gejala);
+
+                $hitung3 = $nilai_cf_user[$indeks3] * ${"h_" . $tala['kode_gejala']};
+                ${"p_h_e_" . $tala['kode_gejala']} = $hitung3 / ${"p_h_" . $dp['kode_diagnosa'] . "xh_" . $dp['kode_diagnosa']};
+                
+                ${"p_h_e_" . $dp['kode_diagnosa']}[] = ${"p_h_e_" . $tala['kode_gejala']};
+
+                echo "Hasil P(H|E)" . $tala['kode_gejala'] . " yaitu (" . $nilai_cf_user[$indeks3] . " x " . ${"h_" . $tala['kode_gejala']} . ") / " . ${"p_h_" . $dp['kode_diagnosa'] . "xh_" . $dp['kode_diagnosa']} . " adalah " . ${"p_h_e_" . $tala['kode_gejala']} . "<br>";
+            }
+
+            echo "<br>";
+
+            ${"hd_" . $dp['kode_diagnosa']} = 0;
+
+            for($k = 0; $k < count(${"p_h_e_" . $dp['kode_diagnosa']}); $k++) {
+                ${"hd_" . $dp['kode_diagnosa']} += ${"p_h_e_" . $dp['kode_diagnosa']}[$k];
+            }
+
+            ${"hasil_bayes_" . $dp['kode_diagnosa']} = ${"hd_" . $dp['kode_diagnosa']} * 100;
+
+            echo "Hasil Perhitungan Bayes dari " . $dp['nama_diagnosa'] . " adalah " . ${"hasil_bayes_" . $dp['kode_diagnosa']} . "<br><br>";
+
         }
-        foreach ($data_penyakit as $dp) {
-            $idpenyakit = $dp['iddiagnosa'];
-            $data_gejala = query("SELECT * FROM gejala WHERE iddiagnosa = $idpenyakit");
-    
-            var_dump($data_gejala);
-        }
+
+        
     }
-    // Ambil CF User Selesai
 
     function update_datadiri($data) {
         global $koneksi;

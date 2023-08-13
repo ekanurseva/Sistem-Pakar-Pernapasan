@@ -1,7 +1,8 @@
 <?php
 require_once '../konek.php';
+validasi();
 
-$id = $_GET['id'];
+$id = dekripsi($_COOKIE['pernapasan']);
 $user = query("SELECT * FROM user WHERE iduser = '$id'")[0];
 
 $jumlah_pertanyaan = jumlah_data("SELECT DISTINCT nama_gejala FROM gejala");
