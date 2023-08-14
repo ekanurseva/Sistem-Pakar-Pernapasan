@@ -774,6 +774,8 @@ function get_kode_gejala($diagnosis)
         }
         ;
     }
+
+    return $kode;
 }
 
     function hitung($data)
