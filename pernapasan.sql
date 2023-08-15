@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 07, 2023 at 03:33 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Host: localhost
+-- Waktu pembuatan: 15 Agu 2023 pada 17.07
+-- Versi server: 10.4.22-MariaDB
+-- Versi PHP: 8.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,69 +24,111 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `diagnosa`
+-- Struktur dari tabel `diagnosa`
 --
 
 CREATE TABLE `diagnosa` (
-  `iddiagnosa` int(15) NOT NULL,
+  `iddiagnosa` int(11) NOT NULL,
   `kode_diagnosa` varchar(25) NOT NULL,
   `nama_diagnosa` varchar(50) NOT NULL,
   `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `diagnosa`
+-- Dumping data untuk tabel `diagnosa`
 --
 
 INSERT INTO `diagnosa` (`iddiagnosa`, `kode_diagnosa`, `nama_diagnosa`, `deskripsi`) VALUES
-(3, 'P1', 'Ambeyen', 'aduh sakit pantat'),
-(4, 'P2', 'Sesak Napas', 'sesak karena ditinggal kamuuu eaaa'),
-(5, 'P3', 'Kurang Oksigen', 'Kurang oksigen dapat menyababkan rindu');
+(1, 'A', 'Asma', 'Asma........'),
+(2, 'B', 'Bronkitis', 'Bronkitis merupakan........'),
+(3, 'T', 'Tuberkulosis', 'Tuberkulosis ..........'),
+(4, 'P', 'Pneumonia', 'Pneumonia......'),
+(5, 'IN', 'Influenza', 'Influenza........'),
+(6, 'I', 'ISPA', 'ISPA..........');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gejala`
+-- Struktur dari tabel `gejala`
 --
 
 CREATE TABLE `gejala` (
   `idgejala` int(11) NOT NULL,
   `iddiagnosa` int(11) NOT NULL,
   `kode_gejala` varchar(20) NOT NULL,
-  `nama_gejala` varchar(50) NOT NULL,
+  `nama_gejala` varchar(100) NOT NULL,
   `bobot` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `gejala`
+-- Dumping data untuk tabel `gejala`
 --
 
 INSERT INTO `gejala` (`idgejala`, `iddiagnosa`, `kode_gejala`, `nama_gejala`, `bobot`) VALUES
-(2, 3, 'G1', 'Susah Duduk', 0.5),
-(3, 5, 'G2', 'Gk bisa napas tanpamuu ', 1),
-(4, 4, 'G3', 'Gk tau deh, males mikir', 0.5);
+(1, 2, 'B1', 'Batuk berdahak/kering', 1),
+(3, 2, 'B2', 'Sakit tenggorokan', 0.5),
+(4, 1, 'A1', 'Batuk', 1),
+(5, 1, 'A2', 'Sesak napas', 1),
+(6, 1, 'A3', 'Mengi', 1),
+(7, 2, 'B3', 'Nyeri dada', 0.5),
+(8, 3, 'T1', 'Demam', 1),
+(9, 3, 'T2', 'Nyeri dada', 0.5),
+(10, 3, 'T3', 'Batuk darah/lender', 0.2),
+(11, 3, 'T4', 'Kelelahan', 1),
+(12, 3, 'T5', 'Panas dingin', 1),
+(13, 3, 'T6', 'Batuk selama 2 minggu lebih', 1),
+(14, 3, 'T7', 'Nafsu makan menurun', 1),
+(15, 3, 'T8', 'Berkeringan di malam hari', 1),
+(16, 3, 'T9', 'Penurunan berat badan', 1),
+(17, 4, 'P1', 'Sesak napas', 0.5),
+(18, 4, 'P2', 'Batuk berdahak/kering', 0.8),
+(19, 4, 'P3', 'Demam', 1),
+(20, 4, 'P4', 'Menggigil', 0.5),
+(21, 4, 'P5', 'Nyeri dada', 0.5),
+(22, 5, 'IN1', 'Demam', 0.7),
+(23, 5, 'IN2', 'Lemas', 1),
+(24, 5, 'IN3', 'Hidung meler/tersumbat', 1),
+(25, 6, 'I1', 'Batuk', 1),
+(26, 6, 'I2', 'Demam', 0.8),
+(27, 6, 'I3', 'Bernapas cepat', 0.4),
+(28, 6, 'I4', 'Warna kebiruan akibat kurang oksigen', 0.2);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hasil_diagnosa`
+-- Struktur dari tabel `hasil_diagnosa`
 --
 
 CREATE TABLE `hasil_diagnosa` (
-  `idhasil` int(10) NOT NULL,
-  `iduser` int(10) NOT NULL,
-  `bobot_bayes` double NOT NULL,
+  `idhasil` int(11) NOT NULL,
+  `iduser` int(11) NOT NULL,
   `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `usia` int(35) NOT NULL,
-  `hsl_bayes` varchar(45) NOT NULL,
-  `bobot_cf` double NOT NULL,
-  `hsl_cf` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `cf_asma` double NOT NULL,
+  `bayes_asma` double NOT NULL,
+  `cf_bronkitis` double NOT NULL,
+  `bayes_bronkitis` double NOT NULL,
+  `cf_tuberkulosis` double NOT NULL,
+  `bayes_tuberkulosis` double NOT NULL,
+  `fc_pneumonia` double NOT NULL,
+  `bayes_pneumonia` double NOT NULL,
+  `cf_influenza` double NOT NULL,
+  `bayes_influenza` double NOT NULL,
+  `cf_ispa` double NOT NULL,
+  `bayes_ispa` double NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `hasil_diagnosa`
+--
+
+INSERT INTO `hasil_diagnosa` (`idhasil`, `iduser`, `tanggal`, `cf_asma`, `bayes_asma`, `cf_bronkitis`, `bayes_bronkitis`, `cf_tuberkulosis`, `bayes_tuberkulosis`, `fc_pneumonia`, `bayes_pneumonia`, `cf_influenza`, `bayes_influenza`, `cf_ispa`, `bayes_ispa`) VALUES
+(1, 18, '2023-08-15 15:03:10', 0, 0, 20, 50, 100, 95.71, 84.4, 78, 100, 92.22, 66, 66),
+(2, 18, '2023-08-15 15:07:23', 70, 100, 61.6, 75, 99.8, 94.62, 86.94, 81.41, 90.82, 90.75, 73.6, 63.33);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jawaban`
+-- Struktur dari tabel `jawaban`
 --
 
 CREATE TABLE `jawaban` (
@@ -94,24 +136,22 @@ CREATE TABLE `jawaban` (
   `bobot` double NOT NULL,
   `kode_jawaban` varchar(20) NOT NULL,
   `jawaban` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `jawaban`
+-- Dumping data untuk tabel `jawaban`
 --
 
 INSERT INTO `jawaban` (`idjawaban`, `bobot`, `kode_jawaban`, `jawaban`) VALUES
 (1, 1, 'SS', 'Sangat Sering'),
-(2, 0.8, 'S', 'Sering'),
-(3, 0.6, 'J', 'Jarang'),
-(4, 0.4, 'SJ', 'Sangat Jarang'),
-(5, 0, 'TP', 'Tidak Pernah'),
-(6, 0.1, 'SB', 'Sangat Bosan');
+(2, 0.7, 'S', 'Sering'),
+(3, 0.4, 'J', 'Jarang'),
+(5, 0, 'TP', 'Tidak Pernah');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pertanyaan`
+-- Struktur dari tabel `pertanyaan`
 --
 
 CREATE TABLE `pertanyaan` (
@@ -119,33 +159,36 @@ CREATE TABLE `pertanyaan` (
   `idgejala` int(11) NOT NULL,
   `kode_pertanyaan` varchar(11) NOT NULL,
   `pertanyaan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `pertanyaan`
---
-
-INSERT INTO `pertanyaan` (`idpertanyaan`, `idgejala`, `kode_pertanyaan`, `pertanyaan`) VALUES
-(4, 3, 'pt2', 'Seberapa sering anda tidak bisa bernapas tanpa saya?'),
-(5, 2, 'pt1', 'Seberapa pantas kau untuk ku tunggu? Nanananananana nanana hoo oo'),
-(7, 2, 'pt4', 'Apakah anda ingin mencoba duduk namun takut meletus balon hijau?');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `solusi`
+-- Struktur dari tabel `solusi`
 --
 
 CREATE TABLE `solusi` (
   `idsolusi` int(11) NOT NULL,
   `iddiagnosa` int(11) NOT NULL,
   `solusi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `solusi`
+--
+
+INSERT INTO `solusi` (`idsolusi`, `iddiagnosa`, `solusi`) VALUES
+(2, 5, 'Solusi atau pengobatannya dengan diberikan obat flu atau pelega hidung, obat demam dan multivitamin'),
+(3, 4, 'Solusi atau pengobatannya adalah diberikan antibiotic, obat sesak nafas, obat batuk, obat demam dan obat anti nyeri'),
+(4, 3, 'Solusi atau pengobatannya adalah obat demam, obat anti nyeri, obat batuk, multivitamin, dan penambah nafsu makan'),
+(5, 2, 'Solusi atau pengobatannya dengan meminum obat batuk atau obat Pereda nyeri '),
+(6, 1, 'Solusi atau pengobatannya dengan obat pelega (reliever) dan pengontrol (controller)'),
+(7, 6, 'Solusi atau pengobatannya diberikan obat batuk, obat demam, dan oksigen');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
@@ -155,127 +198,135 @@ CREATE TABLE `user` (
   `nama` varchar(50) NOT NULL,
   `jk` char(2) NOT NULL,
   `email` varchar(40) NOT NULL,
-  `level` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `level` varchar(10) NOT NULL,
+  `foto` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`iduser`, `username`, `password`, `nama`, `jk`, `email`, `level`) VALUES
-(1, 'kamu', '$2y$10$19sMF4MAYY67XbYhrzPcaeHic7y/tFJ/U49ZMo8zOTQaiFCqD7Bju', 'aku', 'L', 'aku123@gmail.com', 'admin'),
-(3, 'nura', '1234', 'Nuraenii', 'P', 'nuraaa@gmail.com', 'admin'),
-(8, 'umc', '$2y$10$YfKRn8nRZ9R7nIIUeiQZj.SSb.m2OvCl1Ou2dJpEFl5', 'enur', 'L', 'sagacsa@gmail.com', 'admin'),
-(9, 'nurr', '$2y$10$HPnuY30VYVTe9ET37fQOmeXj3nbdw31BvW7yeWpKiCQ', 'Nur Aeni', 'P', 'nurraeni@gmail.com', 'user'),
-(10, 'aenur', '$2y$10$ad/pV4MsO9WxBp8Fl9Zjrezq0f2tmTbO1Qe9N6fpG/oYhWf.bKF1m', 'NUR AENI 01', 'P', 'nurraeni@gmail.com', 'user'),
-(11, 'nuraeni', '$2y$10$yWoq9eZTdAJiMftUybojWudbRY9YUEVByf9F.VRBdOu8Q.DVQt3i6', 'Aeni Nur ', 'P', 'nuraeni@gmail.com', 'user'),
-(18, 'eka', '$2y$10$MLui6ZeLOLU8nV18050h3.TuDhYtd3Yg0KRB/LMYDgcQuhSnP0gEe', 'Eka Nurseva S', 'P', 'ekanursevas@gmail.com', 'user'),
-(19, 'ens', '$2y$10$DRjjIIQHbTyZ9lPeIJO7QeQD7V82qxK.1YXbMkddEPAnsbB/0q28K', 'Eka Nurseva Ens', 'P', 'ekanursevas@gmail.com', 'admin');
+INSERT INTO `user` (`iduser`, `username`, `password`, `nama`, `jk`, `email`, `level`, `foto`) VALUES
+(1, 'kamu', '$2y$10$19sMF4MAYY67XbYhrzPcaeHic7y/tFJ/U49ZMo8zOTQaiFCqD7Bju', 'aku', 'L', 'aku123@gmail.com', 'admin', 'admin.png'),
+(3, 'nura', '1234', 'Nuraenii', 'P', 'nuraaa@gmail.com', 'admin', 'admin.png'),
+(8, 'umc', '$2y$10$YfKRn8nRZ9R7nIIUeiQZj.SSb.m2OvCl1Ou2dJpEFl5', 'enur', 'L', 'sagacsa@gmail.com', 'admin', 'admin.png'),
+(9, 'nurr', '$2y$10$HPnuY30VYVTe9ET37fQOmeXj3nbdw31BvW7yeWpKiCQ', 'Nur Aeni', 'P', 'nurraeni@gmail.com', 'user', 'admin.png'),
+(10, 'aenur', '$2y$10$ad/pV4MsO9WxBp8Fl9Zjrezq0f2tmTbO1Qe9N6fpG/oYhWf.bKF1m', 'NUR AENI 01', 'P', 'nurraeni@gmail.com', 'user', 'admin.png'),
+(11, 'nuraeni', '$2y$10$yWoq9eZTdAJiMftUybojWudbRY9YUEVByf9F.VRBdOu8Q.DVQt3i6', 'Aeni Nur ', 'P', 'nuraeni@gmail.com', 'user', 'admin.png'),
+(18, 'eka', '$2y$10$MLui6ZeLOLU8nV18050h3.TuDhYtd3Yg0KRB/LMYDgcQuhSnP0gEe', 'Eka Nurseva S', 'P', 'ekanursevas@gmail.com', 'user', 'admin.png'),
+(19, 'ens', '$2y$10$DRjjIIQHbTyZ9lPeIJO7QeQD7V82qxK.1YXbMkddEPAnsbB/0q28K', 'Eka Nurseva Ens', 'P', 'ekanursevas@gmail.com', 'admin', 'admin.png'),
+(22, 'fillah21', '$2y$10$PqedqaY/q7U8QmhkZTeV.Ov9AV7nn5sA..65RIL7/rXgPcNaagLP.', 'Fillah Zaki Alhaqi', 'L', 'fillah.alhaqi11@gmail.com', 'admin', 'admin.png');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `diagnosa`
+-- Indeks untuk tabel `diagnosa`
 --
 ALTER TABLE `diagnosa`
   ADD PRIMARY KEY (`iddiagnosa`);
 
 --
--- Indexes for table `gejala`
+-- Indeks untuk tabel `gejala`
 --
 ALTER TABLE `gejala`
   ADD PRIMARY KEY (`idgejala`),
   ADD KEY `iddiagnosa` (`iddiagnosa`);
 
 --
--- Indexes for table `hasil_diagnosa`
+-- Indeks untuk tabel `hasil_diagnosa`
 --
 ALTER TABLE `hasil_diagnosa`
   ADD PRIMARY KEY (`idhasil`),
-  ADD UNIQUE KEY `iduser` (`iduser`);
+  ADD KEY `iduser` (`iduser`);
 
 --
--- Indexes for table `jawaban`
+-- Indeks untuk tabel `jawaban`
 --
 ALTER TABLE `jawaban`
   ADD PRIMARY KEY (`idjawaban`);
 
 --
--- Indexes for table `pertanyaan`
+-- Indeks untuk tabel `pertanyaan`
 --
 ALTER TABLE `pertanyaan`
   ADD PRIMARY KEY (`idpertanyaan`),
   ADD KEY `idgejala` (`idgejala`);
 
 --
--- Indexes for table `solusi`
+-- Indeks untuk tabel `solusi`
 --
 ALTER TABLE `solusi`
   ADD PRIMARY KEY (`idsolusi`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`iduser`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `diagnosa`
+-- AUTO_INCREMENT untuk tabel `diagnosa`
 --
 ALTER TABLE `diagnosa`
-  MODIFY `iddiagnosa` int(15) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `iddiagnosa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `gejala`
+-- AUTO_INCREMENT untuk tabel `gejala`
 --
 ALTER TABLE `gejala`
-  MODIFY `idgejala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idgejala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `hasil_diagnosa`
+-- AUTO_INCREMENT untuk tabel `hasil_diagnosa`
 --
 ALTER TABLE `hasil_diagnosa`
-  MODIFY `idhasil` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `idhasil` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `jawaban`
+-- AUTO_INCREMENT untuk tabel `jawaban`
 --
 ALTER TABLE `jawaban`
   MODIFY `idjawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `pertanyaan`
+-- AUTO_INCREMENT untuk tabel `pertanyaan`
 --
 ALTER TABLE `pertanyaan`
   MODIFY `idpertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `solusi`
+-- AUTO_INCREMENT untuk tabel `solusi`
 --
 ALTER TABLE `solusi`
-  MODIFY `idsolusi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idsolusi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `hasil_diagnosa`
+-- Ketidakleluasaan untuk tabel `gejala`
+--
+ALTER TABLE `gejala`
+  ADD CONSTRAINT `gejala_ibfk_1` FOREIGN KEY (`iddiagnosa`) REFERENCES `diagnosa` (`iddiagnosa`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `hasil_diagnosa`
 --
 ALTER TABLE `hasil_diagnosa`
-  ADD CONSTRAINT `hasil_diagnosa_ibfk_1` FOREIGN KEY (`idhasil`) REFERENCES `user` (`iduser`);
+  ADD CONSTRAINT `hasil_diagnosa_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `user` (`iduser`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

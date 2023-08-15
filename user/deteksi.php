@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
                 <?php foreach ($jawaban as $jawab): ?>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" value="<?= $jawab['kode_jawaban']; ?>"
-                      id="<?= $jawab['kode_jawaban'] . $p1['nama_gejala']; ?>" name="<?= $p1['nama_gejala']; ?>">
+                      id="<?= $jawab['kode_jawaban'] . $p1['nama_gejala']; ?>" name="<?= $p1['nama_gejala']; ?>" required>
                     <label class="form-check-label" for="<?= $jawab['kode_jawaban'] . $p1['nama_gejala']; ?>">
                       <?= $jawab['jawaban']; ?>
                     </label>
@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
                 <?php foreach ($jawaban as $jawab): ?>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" value="<?= $jawab['kode_jawaban']; ?>"
-                      id="<?= $jawab['kode_jawaban'] . $p2['nama_gejala']; ?>" name="<?= $p2['nama_gejala']; ?>">
+                      id="<?= $jawab['kode_jawaban'] . $p2['nama_gejala']; ?>" name="<?= $p2['nama_gejala']; ?>" required>
                     <label class="form-check-label" for="<?= $jawab['kode_jawaban'] . $p2['nama_gejala']; ?>">
                       <?= $jawab['jawaban']; ?>
                     </label>
