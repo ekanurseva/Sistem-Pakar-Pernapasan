@@ -422,6 +422,19 @@ function create_penyakit($data)
     return mysqli_affected_rows($koneksi);
 }
 
+function create_field($data) {
+    global $koneksi;
+    $kode = htmlspecialchars($data['nama_penyakit']);
+    $nama_kecil = strtolower($kode);
+    $nama = str_replace(" ", "", $nama_kecil);
+    $cf = "cf_" . $nama;
+    $bayes = "bayes_" . $nama;
+
+    mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa ADD $cf DOUBLE");
+    mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa ADD $bayes DOUBLE");
+}
+
+
 function edit_penyakit($data)
 {
     global $koneksi;
@@ -465,12 +478,48 @@ function edit_penyakit($data)
     return mysqli_affected_rows($koneksi);
 }
 
+function update_field($data) {
+    global $koneksi;
+
+    $oldpenyakit = $data['oldpenyakit'];
+    $nama_penyakit = htmlspecialchars($data['nama_penyakit']);
+
+    if($nama_penyakit != $oldpenyakit) {
+        $nama_kecil_old = strtolower($oldpenyakit);
+        $nama_old = str_replace(" ", "", $nama_kecil_old);
+        $cf_old = "cf_" . $nama_old;
+        $bayes_old = "bayes_" . $nama_old;
+
+        $nama_kecil = strtolower($nama_penyakit);
+        $nama = str_replace(" ", "", $nama_kecil);
+        $cf = "cf_" . $nama;
+        $bayes = "bayes_" . $nama;
+
+        mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa CHANGE $cf_old $cf DOUBLE");
+        mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa CHANGE $bayes_old $bayes DOUBLE");
+    }
+}
+
 function hapus_diagnosa($iddiagnosa)
 {
     global $koneksi;
     mysqli_query($koneksi, "DELETE FROM diagnosa WHERE iddiagnosa = $iddiagnosa");
 
     return mysqli_affected_rows($koneksi);
+}
+
+function delete_field($id) {
+    global $koneksi;
+
+    $data = query("SELECT * FROM diagnosa WHERE iddiagnosa = $id") [0];
+    $nama_penyakit = $data['nama_diagnosa'];
+    $nama_kecil = strtolower($nama_penyakit);
+    $nama = str_replace(" ", "", $nama_kecil);
+    $cf = "cf_" . $nama;
+    $bayes = "bayes_" . $nama;
+
+    mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa DROP COLUMN $cf");
+    mysqli_query($koneksi, "ALTER TABLE hasil_diagnosa DROP COLUMN $bayes");
 }
 
 function create_solusi($data)
@@ -980,7 +1029,7 @@ function get_kode_gejala($diagnosis)
 
         foreach($data_penyakit as $dapen) {
             $nama_kecil = strtolower($dapen['nama_diagnosa']);
-            $nama = str_replace(" ", "-", $nama_kecil);
+            $nama = str_replace(" ", "", $nama_kecil);
             $gabung = "cf_" . $nama;
             $hasil_cf[] = $data[$gabung];
         }
@@ -996,7 +1045,7 @@ function get_kode_gejala($diagnosis)
             $nilai_yang_dicari = $array_cf[$i];
             foreach($data_penyakit as $dakit) {
                 $nama_kecil = strtolower($dakit['nama_diagnosa']);
-                $nama = str_replace(" ", "-", $nama_kecil);
+                $nama = str_replace(" ", "", $nama_kecil);
                 $kolom = "cf_" . $nama;
     
                 // Kueri mencari nilai
@@ -1016,7 +1065,7 @@ function get_kode_gejala($diagnosis)
 
         foreach($data_penyakit as $dapen) {
             $nama_kecil = strtolower($dapen['nama_diagnosa']);
-            $nama = str_replace(" ", "-", $nama_kecil);
+            $nama = str_replace(" ", "", $nama_kecil);
             $gabung = "cf_" . $nama;
             $hasil_cf[] = $data[$gabung];
         }
@@ -1046,7 +1095,7 @@ function get_kode_gejala($diagnosis)
 
         foreach($data_penyakit as $dapen) {
             $nama_kecil = strtolower($dapen['nama_diagnosa']);
-            $nama = str_replace(" ", "-", $nama_kecil);
+            $nama = str_replace(" ", "", $nama_kecil);
             $gabung = "bayes_" . $nama;
             $hasil_bayes[] = $data[$gabung];
         }
@@ -1061,7 +1110,7 @@ function get_kode_gejala($diagnosis)
             $nilai_yang_dicari = $array_bayes[$i];
             foreach($data_penyakit as $dakit) {
                 $nama_kecil = strtolower($dakit['nama_diagnosa']);
-                $nama = str_replace(" ", "-", $nama_kecil); 
+                $nama = str_replace(" ", "", $nama_kecil); 
                 $kolom = "bayes_" . $nama;
     
                 // Kueri mencari nilai
@@ -1081,7 +1130,7 @@ function get_kode_gejala($diagnosis)
 
         foreach($data_penyakit as $dapen) {
             $nama_kecil = strtolower($dapen['nama_diagnosa']);
-            $nama = str_replace(" ", "-", $nama_kecil);
+            $nama = str_replace(" ", "", $nama_kecil);
             $gabung = "bayes_" . $nama;
             $hasil_bayes[] = $data[$gabung];
         }
@@ -1118,7 +1167,7 @@ function get_kode_gejala($diagnosis)
             foreach($data_penyakit as $dakit) {
 
                 $nama_kecil = strtolower($dakit['nama_diagnosa']);
-                $nama = str_replace(" ", "-", $nama_kecil);
+                $nama = str_replace(" ", "", $nama_kecil);
                 $kolom = $data_uji[$i] . "_" . $nama;
                 
                 // Kueri mencari nilai

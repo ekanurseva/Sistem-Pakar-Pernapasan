@@ -1,19 +1,20 @@
 <?php
-include("konek.php");
-if (isset($_POST["submit_penyakit"])) {
-  if (create_penyakit($_POST) > 0) {
-    echo "
-    <script>
-    alert('Data Penyakit Berhasil Ditambah');
-    document.location.href='penyakit.php';
-    </script>
-    ";
-  } else {
-    echo "<script>
-    alert('Data Penyakit Gagal Ditambah');
-    </script>";
+  include("konek.php");
+  if (isset($_POST["submit_penyakit"])) {
+    if (create_penyakit($_POST) > 0) {
+      create_field($_POST);
+      echo "
+      <script>
+      alert('Data Penyakit Berhasil Ditambah');
+      document.location.href='penyakit.php';
+      </script>
+      ";
+    } else {
+      echo "<script>
+      alert('Data Penyakit Gagal Ditambah');
+      </script>";
+    }
   }
-}
 ?>
 <html lang="en">
 

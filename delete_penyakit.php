@@ -2,6 +2,7 @@
 require_once 'konek.php';
 if (isset($_GET['iddiagnosa'])) {
     $id_diagnosa = $_GET['iddiagnosa'];
+    delete_field($id_diagnosa);
 
     if (hapus_diagnosa($id_diagnosa) > 0) {
         echo "
