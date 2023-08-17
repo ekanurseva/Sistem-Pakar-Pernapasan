@@ -1,3 +1,36 @@
+<?php 
+  require_once 'konek.php';
+
+  $email = dekripsi($_GET['key']);
+
+  $data = query("SELECT * FROM user WHERE email = '$email'")[0];
+
+  if(isset($_POST['submit'])) {
+        $iduser = $_POST['iduser'];
+        $password = mysqli_real_escape_string($koneksi, $_POST["password"]);
+        $password2 = mysqli_real_escape_string($koneksi, $_POST["password2"]);
+
+        if ($password !== $password2) {
+            $error = true;
+        } else {
+          $password = password_hash($password2, PASSWORD_DEFAULT);
+  
+          $query = "UPDATE user SET 
+                      password = '$password'
+                    WHERE iduser = '$iduser'
+                  ";
+          mysqli_query($koneksi, $query);
+
+          echo "
+            <script>
+                alert('Password berhasil diubah, silahkan login');
+                document.location.href='login.php';
+            </script>
+          ";
+        }
+  }
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,12 +49,20 @@
         <img class= "text-start" src="img/dokter.png" style="width:370px;" alt="">
         </div>
         <div class="col-7 login mt-5">
+          <form action="" method="post">
             <h4 class= "mt-4" >Ubah Password</h4>
-            <input placeholder="Password" type="text" class="form-control mb-4">
-            <input placeholder="Konfirmasi Password" type="text" class="form-control mb-4">
-            <a class="text-decoration-none" href="login.php">
-            <button style= "margin-left: -388px; width:100px;" type="submit" class="btn btn-primary mb-4 me-4">Login</button>
-            </a>
+            <input type="hidden" name="iduser" value="<?= $data['iduser']; ?>">
+            <?php if (isset ($error)) : ?>
+              <div class="alert alert-danger" role="alert">
+                Password tidak sesuai
+              </div>
+            <?php endif;?>
+            <input type="text" class="form-control mb-4" id="" value="<?= $data['nama']; ?>" disabled>
+            <input placeholder="Password" type="password" class="form-control mb-4" name="password">
+            <input placeholder="Konfirmasi Password" type="password" class="form-control mb-4" name="password2">
+
+            <button style= "margin-left: -388px; width:100px;" type="submit" class="btn btn-primary mb-4 me-4" name="submit">Submit</button>
+          </form>
            
         </div>
       </div>

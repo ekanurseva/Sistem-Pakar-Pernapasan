@@ -59,6 +59,11 @@ if (isset($_POST["submit"])) {
         <div class="col-7 login mt-5">
           <form action="" method="post">
             <h4 class="mt-4">Login</h4>
+            <?php if (isset ($error)) : ?>
+              <div class="alert alert-danger" role="alert">
+                Username/Password Salah
+              </div>
+            <?php endif;?>
             <input placeholder="Username" name="username" type="text" class="form-control mb-4">
             <input placeholder="Password" name="password" type="password" class="form-control mb-4">
             <div class="d-flex justify-content-end">

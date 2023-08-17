@@ -4,7 +4,7 @@
     if(isset($_POST['email'])) {
         $email = $_POST['email'];
 
-        $result = mysqli_query($conn, "SELECT email FROM user WHERE email = '$email'");
+        $result = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'");
 
         if (!mysqli_fetch_assoc($result)) {
             echo "
@@ -53,14 +53,14 @@
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Ubah Password Sistem Pakar Pernapasan';
-        $mail->Body    = '<p>Klik link ini untuk ubah password (jangan sampai orang lain tahu link ini).</p><a href="http://localhost/varkmodel/ubah_password.php?key=' . $enkripsi_email . '">Klik ini untuk ubah password</a>';
+        $mail->Body    = '<p>Klik link ini untuk ubah password (jangan sampai orang lain tahu link ini).</p><a href="http://localhost/Sistem-Pakar-Pernapasan/lupa.php?key=' . $enkripsi_email . '">Klik ini untuk ubah password</a>';
         $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
 
         echo "
             <script>
-                alert('Berhasil kirim email, silahkan check email ' . $data['email']');
+                alert('Berhasil kirim email, silahkan check email');
                 document.location.href='login.php';
             </script>
         ";
