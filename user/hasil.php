@@ -25,28 +25,7 @@
     $hasil_bayes = hasil_bayes($data_hasil);
   }
 
-  $data_penyakit = query("SELECT * FROM diagnosa");
-  $data_uji = ["cf", "bayes"];
-  $idhasil2 = $data_hasil['idhasil'];
-
-  for($i = 0; $i < count($data_uji); $i++) {
-    $nilai_yang_dicari = ${"hasil_". $data_uji[$i]}[0];
-    foreach($data_penyakit as $dakit) {
-
-      $nama = strtolower($dakit['nama_diagnosa']);
-      $kolom = $data_uji[$i] . "_" . $nama;
-    
-      // Kueri mencari nilai
-      $query = jumlah_data("SELECT * FROM hasil_diagnosa WHERE $kolom = $nilai_yang_dicari AND idhasil = $idhasil2");
-    
-      if ($query == 1) {
-        $terbesar[] = $dakit['nama_diagnosa'];
-      }
-    }
-
-    
-    
-  }
+  $terbesar = cari_deskripsi_solusi($data_hasil, $hasil_cf, $hasil_bayes);
   $terbesar_unique = array_values(array_unique($terbesar));
 ?>
 
@@ -122,8 +101,8 @@
             </div>
         </div>
         <div class="text-end pt-3">
-        <a style= "margin: 0 75px;" class="text-decoration-none" href="registrasi.php">
-            <button style= "width:100px; background:rgb(248, 129, 149);" type="submit" class="btn mb-4">Cetak</button>
+        <a style= "margin: 0 75px;" class="text-decoration-none" href="../print.php?idhasil=<?= $data_hasil['idhasil']; ?>" target="_blank">
+            <button style= "width:100px; background:rgb(248, 129, 149);" type="" class="btn mb-4">Cetak</button>
             </a>
         </div>
         </div>

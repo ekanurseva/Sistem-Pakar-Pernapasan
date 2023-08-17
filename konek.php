@@ -979,7 +979,8 @@ function get_kode_gejala($diagnosis)
         $idhasil = $data['idhasil'];
 
         foreach($data_penyakit as $dapen) {
-            $nama = strtolower($dapen['nama_diagnosa']);
+            $nama_kecil = strtolower($dapen['nama_diagnosa']);
+            $nama = str_replace(" ", "-", $nama_kecil);
             $gabung = "cf_" . $nama;
             $hasil_cf[] = $data[$gabung];
         }
@@ -994,7 +995,8 @@ function get_kode_gejala($diagnosis)
         for($i = 0; $i < count($array_cf); $i++) {
             $nilai_yang_dicari = $array_cf[$i];
             foreach($data_penyakit as $dakit) {
-                $nama = strtolower($dakit['nama_diagnosa']);
+                $nama_kecil = strtolower($dakit['nama_diagnosa']);
+                $nama = str_replace(" ", "-", $nama_kecil);
                 $kolom = "cf_" . $nama;
     
                 // Kueri mencari nilai
@@ -1013,7 +1015,8 @@ function get_kode_gejala($diagnosis)
         $data_penyakit = query("SELECT * FROM diagnosa");
 
         foreach($data_penyakit as $dapen) {
-            $nama = strtolower($dapen['nama_diagnosa']);
+            $nama_kecil = strtolower($dapen['nama_diagnosa']);
+            $nama = str_replace(" ", "-", $nama_kecil);
             $gabung = "cf_" . $nama;
             $hasil_cf[] = $data[$gabung];
         }
@@ -1022,7 +1025,7 @@ function get_kode_gejala($diagnosis)
         $tiga_terbesar = array_slice($hasil_cf, 0, 3);
         $array_cf = array_values(array_unique($tiga_terbesar));
 
-        $jumlah_nilai = 1;
+        $jumlah_nilai = 0;
         for($f = 0; $f < count($array_cf); $f++) {
             foreach ($hasil_cf as $nilai) {
                 if ($nilai === $array_cf[$f]) {
@@ -1042,7 +1045,8 @@ function get_kode_gejala($diagnosis)
         $idhasil = $data['idhasil'];
 
         foreach($data_penyakit as $dapen) {
-            $nama = strtolower($dapen['nama_diagnosa']);
+            $nama_kecil = strtolower($dapen['nama_diagnosa']);
+            $nama = str_replace(" ", "-", $nama_kecil);
             $gabung = "bayes_" . $nama;
             $hasil_bayes[] = $data[$gabung];
         }
@@ -1056,7 +1060,8 @@ function get_kode_gejala($diagnosis)
         for($i = 0; $i < count($array_bayes); $i++) {
             $nilai_yang_dicari = $array_bayes[$i];
             foreach($data_penyakit as $dakit) {
-                $nama = strtolower($dakit['nama_diagnosa']);
+                $nama_kecil = strtolower($dakit['nama_diagnosa']);
+                $nama = str_replace(" ", "-", $nama_kecil); 
                 $kolom = "bayes_" . $nama;
     
                 // Kueri mencari nilai
@@ -1075,7 +1080,8 @@ function get_kode_gejala($diagnosis)
         $data_penyakit = query("SELECT * FROM diagnosa");
 
         foreach($data_penyakit as $dapen) {
-            $nama = strtolower($dapen['nama_diagnosa']);
+            $nama_kecil = strtolower($dapen['nama_diagnosa']);
+            $nama = str_replace(" ", "-", $nama_kecil);
             $gabung = "bayes_" . $nama;
             $hasil_bayes[] = $data[$gabung];
         }
@@ -1095,6 +1101,34 @@ function get_kode_gejala($diagnosis)
 
         $terbesar = array_slice($hasil_bayes, 0, $jumlah_nilai);
 
+
+        return $terbesar;
+    }
+
+    function cari_deskripsi_solusi($hasil, $cf, $bayes) {
+        $data_penyakit = query("SELECT * FROM diagnosa");
+        $data_uji = ["cf", "bayes"];
+        $idhasil2 = $hasil['idhasil'];
+
+        $hasil_cf = $cf;
+        $hasil_bayes = $bayes;
+
+        for($i = 0; $i < count($data_uji); $i++) {
+            $nilai_yang_dicari = ${"hasil_". $data_uji[$i]}[0];
+            foreach($data_penyakit as $dakit) {
+
+                $nama_kecil = strtolower($dakit['nama_diagnosa']);
+                $nama = str_replace(" ", "-", $nama_kecil);
+                $kolom = $data_uji[$i] . "_" . $nama;
+                
+                // Kueri mencari nilai
+                $query = jumlah_data("SELECT * FROM hasil_diagnosa WHERE $kolom = $nilai_yang_dicari AND idhasil = $idhasil2");
+                
+                if ($query == 1) {
+                    $terbesar[] = $dakit['nama_diagnosa'];
+                }
+            }
+        }
 
         return $terbesar;
     }

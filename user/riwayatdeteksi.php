@@ -62,7 +62,7 @@
                   <th scope="row"><?= $i; ?></th>
                   <?php $waktu_tes = strftime('%H:%M:%S / %d %B %Y', strtotime($hasil['tanggal'])); ?>
                   <td><?= $waktu_tes; ?></td>
-                  <td><a style= "text-decoration: none;" href="hasil.php?idhasil=<?= $hasil['idhasil']; ?>">Detail</a> | <a style= "text-decoration: none;" href="">Cetak</a></td>
+                  <td><a style= "text-decoration: none;" href="hasil.php?idhasil=<?= $hasil['idhasil']; ?>">Detail</a> | <a style= "text-decoration: none;" href="../print.php?idhasil=<?= $hasil['idhasil']; ?>" target="_blank">Cetak</a></td>
                 </tr>
               <?php 
                 $i++;
