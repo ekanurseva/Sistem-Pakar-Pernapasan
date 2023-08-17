@@ -59,7 +59,7 @@ function validasi() {
     global $koneksi;
     if (!isset($_COOKIE['pernapasan'])) {
         echo "<script>
-                document.location.href='logout.php';
+                document.location.href='../keluar.php';
               </script>";
         exit;
     }
@@ -70,7 +70,7 @@ function validasi() {
     
     if (mysqli_num_rows($result) !== 1) {
         echo "<script>
-                document.location.href='logout.php';
+                document.location.href='../keluar.php';
               </script>";
         exit;
     }
@@ -80,7 +80,7 @@ function validasi_admin() {
     global $koneksi;
     if (!isset($_COOKIE['pernapasan'])) {
         echo "<script>
-                document.location.href='../logout.php';
+                document.location.href='keluar.php';
               </script>";
         exit;
     }
@@ -93,12 +93,12 @@ function validasi_admin() {
 
     if (mysqli_num_rows($result) !== 1) {
         echo "<script>
-                document.location.href='../logout.php';
+                document.location.href='keluar.php';
               </script>";
         exit;
     } elseif($cek['role'] !== "Admin") {
         echo "<script>
-                document.location.href='../logout.php';
+                document.location.href='keluar.php';
               </script>";
         exit;
     }
@@ -400,7 +400,6 @@ function create_penyakit($data)
     $nama_penyakit = $data['nama_penyakit'];
     $kode_penyakit = $data['kode'];
     $deskripsi = $data['deskripsi'];
-    $solusi = $data['solusi'];
 
     $result = mysqli_query($koneksi, "SELECT nama_diagnosa FROM diagnosa WHERE nama_diagnosa = 'nama_penyakit'") or die(mysqli_error($koneksi));
     if (mysqli_fetch_assoc($result)) {
@@ -418,7 +417,7 @@ function create_penyakit($data)
         return false;
     }
 
-    mysqli_query($koneksi, "INSERT INTO diagnosa VALUES (NULL, '$kode_penyakit', '$nama_penyakit', '$deskripsi', '$solusi')");
+    mysqli_query($koneksi, "INSERT INTO diagnosa VALUES (NULL, '$kode_penyakit', '$nama_penyakit', '$deskripsi')");
 
     return mysqli_affected_rows($koneksi);
 }
@@ -432,7 +431,6 @@ function edit_penyakit($data)
     $nama_penyakit = $data['nama_penyakit'];
     $kode_penyakit = $data['kode'];
     $deskripsi = $data['deskripsi'];
-    $solusi = $data['solusi'];
 
     if ($nama_penyakit !== $oldpenyakit) {
         $result = mysqli_query($koneksi, "SELECT nama_diagnosa FROM diagnosa WHERE nama_diagnosa = '$nama_penyakit'");
@@ -459,8 +457,7 @@ function edit_penyakit($data)
     $query = "UPDATE diagnosa SET 
                  kode_diagnosa = '$kode_penyakit',
                  nama_diagnosa = '$nama_penyakit',
-                 deskripsi = '$deskripsi',
-                 solusi = '$solusi'
+                 deskripsi = '$deskripsi'
               WHERE iddiagnosa = '$iddiagnosa'
             ";
     mysqli_query($koneksi, $query);
@@ -974,5 +971,131 @@ function get_kode_gejala($diagnosis)
         mysqli_query($koneksi, $query);
 
         return mysqli_affected_rows($koneksi);
+    }
+
+    function penyakit_cf($data) {
+
+        $data_penyakit = query("SELECT * FROM diagnosa");
+        $idhasil = $data['idhasil'];
+
+        foreach($data_penyakit as $dapen) {
+            $nama = strtolower($dapen['nama_diagnosa']);
+            $gabung = "cf_" . $nama;
+            $hasil_cf[] = $data[$gabung];
+        }
+
+        rsort($hasil_cf);
+        $tiga_terbesar = array_slice($hasil_cf, 0, 3);
+
+        $array_cf = array_values(array_unique($tiga_terbesar));
+
+        $data_penyakit = query("SELECT * FROM diagnosa");
+
+        for($i = 0; $i < count($array_cf); $i++) {
+            $nilai_yang_dicari = $array_cf[$i];
+            foreach($data_penyakit as $dakit) {
+                $nama = strtolower($dakit['nama_diagnosa']);
+                $kolom = "cf_" . $nama;
+    
+                // Kueri mencari nilai
+                $query = jumlah_data("SELECT * FROM hasil_diagnosa WHERE $kolom = $nilai_yang_dicari AND idhasil = $idhasil");
+    
+                if ($query == 1) {
+                    $penyakit_cf[] = $dakit['nama_diagnosa'];
+                }
+            }
+        }
+
+        return $penyakit_cf;
+    }
+
+    function hasil_cf($data) {
+        $data_penyakit = query("SELECT * FROM diagnosa");
+
+        foreach($data_penyakit as $dapen) {
+            $nama = strtolower($dapen['nama_diagnosa']);
+            $gabung = "cf_" . $nama;
+            $hasil_cf[] = $data[$gabung];
+        }
+
+        rsort($hasil_cf);
+        $tiga_terbesar = array_slice($hasil_cf, 0, 3);
+        $array_cf = array_values(array_unique($tiga_terbesar));
+
+        $jumlah_nilai = 1;
+        for($f = 0; $f < count($array_cf); $f++) {
+            foreach ($hasil_cf as $nilai) {
+                if ($nilai === $array_cf[$f]) {
+                    $jumlah_nilai++;
+                }
+            }
+        }
+
+        $terbesar = array_slice($hasil_cf, 0, $jumlah_nilai);
+
+
+        return $terbesar;
+    }
+
+    function penyakit_bayes($data) {
+        $data_penyakit = query("SELECT * FROM diagnosa");
+        $idhasil = $data['idhasil'];
+
+        foreach($data_penyakit as $dapen) {
+            $nama = strtolower($dapen['nama_diagnosa']);
+            $gabung = "bayes_" . $nama;
+            $hasil_bayes[] = $data[$gabung];
+        }
+
+        rsort($hasil_bayes);
+        $tiga_terbesar = array_slice($hasil_bayes, 0, 3);
+
+        $array_bayes = array_values(array_unique($tiga_terbesar));
+
+        $data_penyakit = query("SELECT * FROM diagnosa");
+        for($i = 0; $i < count($array_bayes); $i++) {
+            $nilai_yang_dicari = $array_bayes[$i];
+            foreach($data_penyakit as $dakit) {
+                $nama = strtolower($dakit['nama_diagnosa']);
+                $kolom = "bayes_" . $nama;
+    
+                // Kueri mencari nilai
+                $query = jumlah_data("SELECT * FROM hasil_diagnosa WHERE $kolom = $nilai_yang_dicari AND idhasil = $idhasil");
+    
+                if ($query > 0) {
+                    $penyakit_bayes[] = $dakit['nama_diagnosa'];
+                }
+            }
+        }
+
+        return $penyakit_bayes;   
+    }
+
+    function hasil_bayes($data) {
+        $data_penyakit = query("SELECT * FROM diagnosa");
+
+        foreach($data_penyakit as $dapen) {
+            $nama = strtolower($dapen['nama_diagnosa']);
+            $gabung = "bayes_" . $nama;
+            $hasil_bayes[] = $data[$gabung];
+        }
+
+        rsort($hasil_bayes);
+        $tiga_terbesar = array_slice($hasil_bayes, 0, 3);
+        $array_bayes = array_values(array_unique($tiga_terbesar));
+
+        $jumlah_nilai = 0;
+        for($f = 0; $f < count($array_bayes); $f++) {
+            foreach ($hasil_bayes as $nilai) {
+                if ($nilai === $array_bayes[$f]) {
+                    $jumlah_nilai++;
+                }
+            }
+        }
+
+        $terbesar = array_slice($hasil_bayes, 0, $jumlah_nilai);
+
+
+        return $terbesar;
     }
 ?>

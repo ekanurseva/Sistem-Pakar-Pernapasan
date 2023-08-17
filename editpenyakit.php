@@ -77,7 +77,7 @@ if (isset($_POST['submit_penyakit'])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Deskripsi</label>
-            <input type="text" class="form-control" value="<?= $data['deskripsi']; ?>" name="deskripsi">
+            <textarea name="deskripsi" id="" cols="30" rows="10" class="form-control"><?= $data['deskripsi']; ?></textarea>
           </div>
 
           <button type="submit" class="btn btn-primary" name="submit_penyakit">Update</button>

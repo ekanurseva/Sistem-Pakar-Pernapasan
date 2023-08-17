@@ -1,3 +1,13 @@
+<?php 
+  require_once '../konek.php';
+  validasi();
+
+  $iduser = dekripsi($_COOKIE['pernapasan']);
+
+  $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE iduser = $iduser");
+?>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,32 +48,26 @@
         <table class="table mt-3">
             <thead>
                 <tr>
-                <th scope="col">No</th>
-                <th scope="col">Nama</th>
-                <th scope="col">Usia</th>
-                <th scope="col">Waktu</th>
-                <th scope="col">Hasil</th>
-                <th scope="col">Aksi</th>
+                  <th scope="col">No</th>
+                  <th scope="col">Waktu</th>
+                  <th scope="col">Aksi</th>
                 </tr>
             </thead>
             <tbody>
+              <?php 
+                $i = 1;
+                foreach($data_hasil as $hasil) :
+              ?>
                 <tr>
-                <th scope="row">1</th>
-                <td>Nur Aeni</td>
-                <td>22</td>
-                <td>01 Juli 2023</td>
-                <td>Asma CF 80% Bayes 95%</td>
-                <td><a style= "text-decoration: none;" href="">Hapus</a> | <a style= "text-decoration: none;" href="">Cetak</a></td>
+                  <th scope="row"><?= $i; ?></th>
+                  <?php $waktu_tes = strftime('%H:%M:%S / %d %B %Y', strtotime($hasil['tanggal'])); ?>
+                  <td><?= $waktu_tes; ?></td>
+                  <td><a style= "text-decoration: none;" href="hasil.php?idhasil=<?= $hasil['idhasil']; ?>">Detail</a> | <a style= "text-decoration: none;" href="">Cetak</a></td>
                 </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>25</td>
-                <td>30 Mei 2023</td>
-                <td>Influenza CF 70% Bayes 85%</td>
-                <td><a style= "text-decoration: none;" href="">Hapus</a> | <a style= "text-decoration: none;" href="">Cetak</a></td>
-                </tr>
-                <tr>
+              <?php 
+                $i++;
+                endforeach;
+              ?>
             </tbody>
         </table>
       </div>

@@ -1,3 +1,55 @@
+<?php 
+  require_once '../konek.php';
+  validasi();
+
+  $iduser = dekripsi($_COOKIE['pernapasan']);
+  $data_user = query("SELECT * FROM user WHERE iduser = $iduser")[0];
+
+  if(isset($_GET['idhasil'])) {
+    $idhasil = $_GET['idhasil'];
+    $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE idhasil = $idhasil")[0];
+
+    $penyakit_cf = penyakit_cf($data_hasil);
+    $hasil_cf = hasil_cf($data_hasil);
+    
+    $penyakit_bayes = penyakit_bayes($data_hasil);
+    $hasil_bayes = hasil_bayes($data_hasil);
+  } else {
+
+    $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE iduser = $iduser AND idhasil = (SELECT MAX(idhasil) FROM hasil_diagnosa WHERE iduser = $iduser)")[0];
+    
+    $penyakit_cf = penyakit_cf($data_hasil);
+    $hasil_cf = hasil_cf($data_hasil);
+
+    $penyakit_bayes = penyakit_bayes($data_hasil);
+    $hasil_bayes = hasil_bayes($data_hasil);
+  }
+
+  $data_penyakit = query("SELECT * FROM diagnosa");
+  $data_uji = ["cf", "bayes"];
+  $idhasil2 = $data_hasil['idhasil'];
+
+  for($i = 0; $i < count($data_uji); $i++) {
+    $nilai_yang_dicari = ${"hasil_". $data_uji[$i]}[0];
+    foreach($data_penyakit as $dakit) {
+
+      $nama = strtolower($dakit['nama_diagnosa']);
+      $kolom = $data_uji[$i] . "_" . $nama;
+    
+      // Kueri mencari nilai
+      $query = jumlah_data("SELECT * FROM hasil_diagnosa WHERE $kolom = $nilai_yang_dicari AND idhasil = $idhasil2");
+    
+      if ($query == 1) {
+        $terbesar[] = $dakit['nama_diagnosa'];
+      }
+    }
+
+    
+    
+  }
+  $terbesar_unique = array_values(array_unique($terbesar));
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,27 +77,48 @@
         <h1>Hasil Diagnosa</h1>
         <div class="text-center">
         <div class="tabel mt-3" style="margin: 0 75px;">
-            <h6 class= "pt-3">Nur Aeni (22 tahun)</h6>
+            <h6 class= "pt-3"><?= $data_user['nama']; ?></h6>
             <h6 class= "pb-3">Diagnosa Penyakit Saluran Pernapasannya adalah:</h6>
             <div class="row" style= "padding: 0 100px;">
                 <div class="col-6 pb-3">
                     <div class="tabel py-3" style= "background:rgb(253, 246, 247);">
                         <h5>Certainty Factor:</h5>
-                        <h3>Influenza 90%</h3>
-                        <h3>Tuberkulosis 85%</h3>
-                        <h3>Asma 70%</h3>
+                        <?php for($i = 0; $i < count($penyakit_cf); $i++) : ?>
+                          <h3><?= $penyakit_cf[$i]; ?> <?= $hasil_cf[$i]; ?>%</h3>
+                        <?php endfor; ?>
                     </div>
                 </div>
                 <div class="col-6 pb-3">
                     <div class="tabel py-3" style= "background:rgb(253, 246, 247);">
                         <h5>Teorema Bayes:</h5>
-                        <h3>Influenza 75%</h3>
-                        <h3>Tuberkulosis 65%</h3>
-                        <h3>Asma 55%</h3>
+                        <?php for($j = 0; $j < count($penyakit_bayes); $j++) : ?>
+                          <h3><?= $penyakit_bayes[$j]; ?> <?= $hasil_bayes[$j]; ?>%</h3>
+                        <?php endfor; ?>
                     </div>
                 </div>
-                <h6 class= "text-start pb-3" >Deskripsi:</h6>
-                <h6 class= "text-start  pb-3">Solusi:</h6>
+                <h4 class= "text-start" >Deskripsi:</h4>
+                <?php foreach($terbesar_unique as $tu) : ?>
+                  <h6 class= "text-start"><?= $tu; ?> : </h6>
+                  <?php 
+                    $penyakit_detail = query("SELECT * FROM diagnosa WHERE nama_diagnosa = '$tu'")[0]; 
+                    $deskripsi_penyakit = $penyakit_detail['deskripsi'];
+                  ?>
+                  <p class="text-start"><?= $deskripsi_penyakit; ?></p>
+                <?php endforeach; ?>
+                <h4 class= "text-start">Solusi:</h4>
+                <?php foreach($terbesar_unique as $tuni) : ?>
+                  <h6 class= "text-start"><?= $tuni; ?> : </h6>
+                  <?php 
+                    $penyakit_detail = query("SELECT * FROM diagnosa WHERE nama_diagnosa = '$tuni'")[0]; 
+                    $id_penyakit = $penyakit_detail['iddiagnosa'];
+                    $data_solusi = query("SELECT * FROM solusi WHERE iddiagnosa = $id_penyakit");
+                  ?>
+                  <ul class= "ms-3">
+                    <?php foreach($data_solusi as $solusi) : ?>
+                      <li class= "text-start"><?= $solusi['solusi']; ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                <?php endforeach; ?>
             </div>
         </div>
         <div class="text-end pt-3">

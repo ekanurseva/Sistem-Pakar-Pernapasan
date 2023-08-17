@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Waktu pembuatan: 15 Agu 2023 pada 17.07
+-- Waktu pembuatan: 17 Agu 2023 pada 04.40
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 8.0.15
 
@@ -39,12 +39,12 @@ CREATE TABLE `diagnosa` (
 --
 
 INSERT INTO `diagnosa` (`iddiagnosa`, `kode_diagnosa`, `nama_diagnosa`, `deskripsi`) VALUES
-(1, 'A', 'Asma', 'Asma........'),
-(2, 'B', 'Bronkitis', 'Bronkitis merupakan........'),
-(3, 'T', 'Tuberkulosis', 'Tuberkulosis ..........'),
-(4, 'P', 'Pneumonia', 'Pneumonia......'),
-(5, 'IN', 'Influenza', 'Influenza........'),
-(6, 'I', 'ISPA', 'ISPA..........');
+(1, 'A', 'Asma', 'Asma adalah penyakit yang ditandai dengan penyempitan saluran napas sehingga penderita mengalami keluhan sesak napas atau kesulitan bernapas.'),
+(2, 'B', 'Bronkitis', 'Bronkitis merupakan penyakit infeksi pada saluran pernapasan yang menyerang bronkus.'),
+(3, 'T', 'Tuberkulosis', 'Tuberkulosis (TBC) merupakan penyakit menular yang umum dan dalam beberapa kasus bersifat mematikan.'),
+(4, 'P', 'Pneumonia', 'Pneumonia atau yang biasa disebut dengan paru-paru basah merupakan infeksi yang menyerang jaringan paru-paru'),
+(5, 'IN', 'Influenza', 'Influenza (Flu) merupakan salah satu penyakit saluran pernapasan yang disebabkan oleh virus yang disebut virus influenza.'),
+(6, 'I', 'ISPA', 'ISPA atau Infeksi saluran pernapasan akut adalah infeksi di saluran pernapasan, yang menimbulkan gejala awal seperti batuk, pilek, disertai dengan demam.');
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,7 @@ CREATE TABLE `hasil_diagnosa` (
   `bayes_bronkitis` double NOT NULL,
   `cf_tuberkulosis` double NOT NULL,
   `bayes_tuberkulosis` double NOT NULL,
-  `fc_pneumonia` double NOT NULL,
+  `cf_pneumonia` double NOT NULL,
   `bayes_pneumonia` double NOT NULL,
   `cf_influenza` double NOT NULL,
   `bayes_influenza` double NOT NULL,
@@ -121,9 +121,9 @@ CREATE TABLE `hasil_diagnosa` (
 -- Dumping data untuk tabel `hasil_diagnosa`
 --
 
-INSERT INTO `hasil_diagnosa` (`idhasil`, `iduser`, `tanggal`, `cf_asma`, `bayes_asma`, `cf_bronkitis`, `bayes_bronkitis`, `cf_tuberkulosis`, `bayes_tuberkulosis`, `fc_pneumonia`, `bayes_pneumonia`, `cf_influenza`, `bayes_influenza`, `cf_ispa`, `bayes_ispa`) VALUES
-(1, 18, '2023-08-15 15:03:10', 0, 0, 20, 50, 100, 95.71, 84.4, 78, 100, 92.22, 66, 66),
-(2, 18, '2023-08-15 15:07:23', 70, 100, 61.6, 75, 99.8, 94.62, 86.94, 81.41, 90.82, 90.75, 73.6, 63.33);
+INSERT INTO `hasil_diagnosa` (`idhasil`, `iduser`, `tanggal`, `cf_asma`, `bayes_asma`, `cf_bronkitis`, `bayes_bronkitis`, `cf_tuberkulosis`, `bayes_tuberkulosis`, `cf_pneumonia`, `bayes_pneumonia`, `cf_influenza`, `bayes_influenza`, `cf_ispa`, `bayes_ispa`) VALUES
+(1, 18, '2023-08-16 23:53:11', 84.4, 84.4, 20, 50, 100, 95.71, 84.4, 78, 100, 92.22, 66, 66),
+(2, 18, '2023-08-16 18:53:49', 84.4, 100, 61.6, 75, 99.8, 94.62, 86.94, 81.41, 90.82, 90.75, 73.6, 63.33);
 
 -- --------------------------------------------------------
 
@@ -151,19 +151,6 @@ INSERT INTO `jawaban` (`idjawaban`, `bobot`, `kode_jawaban`, `jawaban`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pertanyaan`
---
-
-CREATE TABLE `pertanyaan` (
-  `idpertanyaan` int(11) NOT NULL,
-  `idgejala` int(11) NOT NULL,
-  `kode_pertanyaan` varchar(11) NOT NULL,
-  `pertanyaan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Struktur dari tabel `solusi`
 --
 
@@ -178,12 +165,26 @@ CREATE TABLE `solusi` (
 --
 
 INSERT INTO `solusi` (`idsolusi`, `iddiagnosa`, `solusi`) VALUES
-(2, 5, 'Solusi atau pengobatannya dengan diberikan obat flu atau pelega hidung, obat demam dan multivitamin'),
-(3, 4, 'Solusi atau pengobatannya adalah diberikan antibiotic, obat sesak nafas, obat batuk, obat demam dan obat anti nyeri'),
-(4, 3, 'Solusi atau pengobatannya adalah obat demam, obat anti nyeri, obat batuk, multivitamin, dan penambah nafsu makan'),
-(5, 2, 'Solusi atau pengobatannya dengan meminum obat batuk atau obat Pereda nyeri '),
-(6, 1, 'Solusi atau pengobatannya dengan obat pelega (reliever) dan pengontrol (controller)'),
-(7, 6, 'Solusi atau pengobatannya diberikan obat batuk, obat demam, dan oksigen');
+(2, 5, 'Diberikan obat flu atau pelega hidung'),
+(3, 4, 'Diberikan antibiotic'),
+(4, 3, 'Meminum obat demam'),
+(5, 2, 'Meminum obat batuk'),
+(6, 1, 'Menggunakan obat pelega (reliever)'),
+(7, 6, 'Diberikan obat batuk'),
+(8, 1, 'Menggunakan pengontrol (controller)'),
+(9, 2, 'Meminum obat pereda nyeri '),
+(10, 3, 'Meminum obat anti nyeri'),
+(11, 4, 'Meminum obat batuk'),
+(12, 3, 'Mengonsumsi multivitamin'),
+(14, 3, 'Meminum suplemen penambah nafsu makan'),
+(15, 4, 'Diberikan obat sesak nafas'),
+(16, 3, 'Meminum obat batuk'),
+(17, 4, 'Mengonsumsi obat demam'),
+(18, 4, 'Meminum obat anti nyeri'),
+(19, 5, 'Meminum obat demam'),
+(20, 5, 'Mengonsumsi multivitamin'),
+(21, 6, 'Meminum obat demam'),
+(22, 6, 'Diberikan oksigen');
 
 -- --------------------------------------------------------
 
@@ -248,17 +249,11 @@ ALTER TABLE `jawaban`
   ADD PRIMARY KEY (`idjawaban`);
 
 --
--- Indeks untuk tabel `pertanyaan`
---
-ALTER TABLE `pertanyaan`
-  ADD PRIMARY KEY (`idpertanyaan`),
-  ADD KEY `idgejala` (`idgejala`);
-
---
 -- Indeks untuk tabel `solusi`
 --
 ALTER TABLE `solusi`
-  ADD PRIMARY KEY (`idsolusi`);
+  ADD PRIMARY KEY (`idsolusi`),
+  ADD KEY `iddiagnosa` (`iddiagnosa`);
 
 --
 -- Indeks untuk tabel `user`
@@ -295,16 +290,10 @@ ALTER TABLE `jawaban`
   MODIFY `idjawaban` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT untuk tabel `pertanyaan`
---
-ALTER TABLE `pertanyaan`
-  MODIFY `idpertanyaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
 -- AUTO_INCREMENT untuk tabel `solusi`
 --
 ALTER TABLE `solusi`
-  MODIFY `idsolusi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idsolusi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
@@ -327,6 +316,12 @@ ALTER TABLE `gejala`
 --
 ALTER TABLE `hasil_diagnosa`
   ADD CONSTRAINT `hasil_diagnosa_ibfk_1` FOREIGN KEY (`iduser`) REFERENCES `user` (`iduser`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `solusi`
+--
+ALTER TABLE `solusi`
+  ADD CONSTRAINT `solusi_ibfk_1` FOREIGN KEY (`iddiagnosa`) REFERENCES `diagnosa` (`iddiagnosa`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
