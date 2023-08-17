@@ -62,7 +62,9 @@ if (isset($_POST["submit"])) {
             <input placeholder="Username" name="username" type="text" class="form-control mb-4">
             <input placeholder="Password" name="password" type="password" class="form-control mb-4">
             <div class="d-flex justify-content-end">
-              <a href="lupa.php" style="text-decoration: none;">Lupa Password?</a>
+              <a type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Lupa Password?
+              </a>
             </div>
             <div class="row" style="padding: 0;">
               <div class="col-2 d-flex justify-content-start">
@@ -81,7 +83,34 @@ if (isset($_POST["submit"])) {
           </form>
         </div>
       </div>
+      <!-- Modal Forgot Password = Input Email -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 text-dark" id="staticBackdropLabel">Masukkan Email</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
+            <form action="sendemail.php" method="post">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="email" class="form-label text-dark">Masukkan email yang
+                    terdaftar</label>
+                  <input type="email" class="form-control" id="email" name="email">
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Pilih</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kembali</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Modal Forgot Password = Input Email Selesai -->
     </div>
   </div>
 

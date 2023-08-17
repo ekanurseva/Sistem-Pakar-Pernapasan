@@ -1,26 +1,32 @@
 <?php
-include("konek.php");
+require_once 'konek.php';
+$id = dekripsi($_COOKIE['pernapasan']);
 
-$data = query("SELECT * FROM user WHERE iduser");
+$data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
 
-if (isset($_POST['submit_profil'])) {
-  if (profil($_POST) > 0) {
-    echo "
-                <script>
-                alert('Data Berhasil Diubah');
-                document.location.href='datapengguna.php';
-                </script>
-            ";
-  } else {
-    echo "
-                <script>
-                alert('Data Gagal Diubah');
-                document.location.href='datapengguna.php';
-                </script>
-            ";
-  }
+if ($data_diri['jk'] == "L") {
+  $jenis_kelamim = "Laki-Laki";
+} else {
+  $jenis_kelamim = "Perempuan";
 }
 
+if (isset($_POST['submit'])) {
+  if (update_datadiri($_POST) > 0) {
+    echo "
+                  <script>
+                  alert('Data Diri Berhasil Diubah');
+                  document.location.href='datadiri.php';
+                  </script>
+              ";
+  } else {
+    echo "
+                  <script>
+                  alert('Data Diri Gagal Diubah');
+                  document.location.href='datadiri.php';
+                  </script>
+              ";
+  }
+}
 ?>
 
 <html lang="en">
@@ -59,53 +65,57 @@ if (isset($_POST['submit_profil'])) {
     <div class="content" style="width:80%;">
       <div class="container" style="padding-left: 35px; padding-right: 20px;">
         <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Data Diri</h1>
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="iduser" value="<?= $data_diri['iduser']; ?>">
+          <input type="hidden" name="oldusername" value="<?= $data_diri['username']; ?>">
+          <input type="hidden" name="oldpassword" value="<?= $data_diri['password']; ?>">
           <div class="profil text-center mt-4">
-            <img src="img/<?= $data['foto']; ?>" alt="" style="width:100px;">
+            <img src="img/admin.png" alt="" style="width:100px;">
+
             <div class="mb-3 mt-2">
               <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile">
             </div>
           </div>
+
           <div class="mb-3">
-            <label for="nama" class="form-label">Nama</label>
-            <input type="text" class="form-control" id="nama" value="<?= $data['nama']; ?>" name="nama">
+            <label for="exampleInputEmail1" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              value="<?= $data_diri['nama']; ?>" name="nama">
           </div>
+
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" value="<?= $data['username']; ?>" name="username">
+            <label for="exampleInputEmail1" class="form-label">Username</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              value="<?= $data_diri['username']; ?>" name="username">
           </div>
+
           <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" value="<?= $data['email']; ?>" name="email">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              value="<?= $data_diri['email']; ?>" name="email">
           </div>
+
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" value="<?= $data['password']; ?>" id="password" name="password">
-            <div class="mb-3">
-              <label for="password2" class="form-label">Konfirmasi Password</label>
-              <input type="password" class="form-control" value="<?= $data['password']; ?>" id="password2"
-                name="password2">
-            </div>
-            <div class="mb-3">
-              <label for="tlp" class="form-label">Telepon</label>
-              <input type="text" class="form-control" id="tlp" value="<?= $data['telepon']; ?>" name="telepon">
-            </div>
-            <div class="mb-3">
-              <label for="tgl" class="form-label">Tanggal Lahir</label>
-              <input type="date" class="form-control" id="tgl" value="<?= $data['tgl_lahir']; ?>" name="tgl_lahir">
-            </div>
-            <div class="mb-3">
-              <label for="jk" class="form-label">Jenis Kelamin</label>
-              <select id="jk" class="form-select" name="jk" aria-label="Default select example">
-                <option selected hidden>
-                  <?= $data['jk']; ?>
-                </option>
-                <option value="1">Perempuan</option>
-                <option value="2">Laki-Laki</option>
-              </select>
-            </div>
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1"
+              value="<?= $data_diri['password']; ?>" name="password">
           </div>
-          <button type="submit" name="submit_profil" class="btn btn-primary">Submit</button>
+
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Konfirmasi Password</label>
+            <input type="password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+              value="<?= $data_diri['password']; ?>" name="password2">
+          </div>
+
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Jenis Kelamin</label>
+            <select class="form-select" aria-label="Default select example" name="jk">
+              <option value="<?= $data_diri['jk']; ?>" selected hidden><?= $jenis_kelamim; ?></option>
+              <option value="P">Perempuan</option>
+              <option value="L">Laki-Laki</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" name="submit">Submit</button>
         </form>
       </div>
     </div>
