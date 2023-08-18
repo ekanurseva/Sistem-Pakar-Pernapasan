@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 
 $penyakit = mysqli_query($koneksi, "SELECT * FROM diagnosa ORDER BY iddiagnosa DESC");
 

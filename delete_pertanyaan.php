@@ -1,5 +1,6 @@
 <?php
 require_once 'konek.php';
+validasi_admin();
 if (isset($_GET['idpertanyaan'])) {
     $id_pertanyaan = $_GET['idpertanyaan'];
 

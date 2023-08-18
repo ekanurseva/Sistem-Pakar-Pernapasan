@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 
 if (isset($_POST["submit_jawaban"])) {
   if (create_jawaban($_POST) > 0) {

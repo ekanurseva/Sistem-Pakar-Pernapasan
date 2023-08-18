@@ -20,11 +20,12 @@
         }
     }
 
-    $iduser = dekripsi($_COOKIE['pernapasan']);
-    $data_user = query("SELECT * FROM user WHERE iduser = $iduser")[0];
-
     $idhasil = $_GET['idhasil'];
     $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE idhasil = $idhasil")[0];
+    
+    $iduser = $data_hasil['iduser'];
+    $data_user = query("SELECT * FROM user WHERE iduser = $iduser")[0];
+    cek_null($data_hasil);
 
     $penyakit_cf = penyakit_cf($data_hasil);
     $hasil_cf = hasil_cf($data_hasil);

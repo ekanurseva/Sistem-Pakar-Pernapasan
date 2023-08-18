@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 
 $data_jawaban = query("SELECT * FROM jawaban");
 $jumlah_jawaban = jumlah_data("SELECT * FROM jawaban");

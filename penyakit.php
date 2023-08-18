@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 $data = query("SELECT * FROM diagnosa");
 $data_solusi = query("SELECT * FROM solusi");
 

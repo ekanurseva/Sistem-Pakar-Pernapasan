@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 
 $iduser = $_GET['id'];
 

@@ -96,7 +96,7 @@ function validasi_admin() {
                 document.location.href='keluar.php';
               </script>";
         exit;
-    } elseif($cek['role'] !== "Admin") {
+    } elseif($cek['level'] !== "admin") {
         echo "<script>
                 document.location.href='keluar.php';
               </script>";
@@ -1180,5 +1180,48 @@ function get_kode_gejala($diagnosis)
         }
 
         return $terbesar;
+    }
+
+    function cek_null($data) {
+        global $koneksi;
+        $penyakit = query("SELECT * FROM diagnosa");
+        $idhasil = $data['idhasil'];
+
+        foreach ($penyakit as $p) {
+            $nama_kecil = strtolower($p['nama_diagnosa']);
+            $nama = str_replace(" ", "", $nama_kecil);
+            $kolom_cf = "cf_" . $nama;
+            $kolom_bayes = "bayes_" . $nama;
+
+            $penyakit_cf[] = $kolom_cf;
+            $penyakit_bayes[] = $kolom_bayes;
+        }
+
+        foreach ($penyakit_cf as $pcf) {
+            if ($data[$pcf] === NULL) {
+            $query = "UPDATE hasil_diagnosa SET 
+                        $pcf = 0
+                    WHERE idhasil = '$idhasil'
+                    ";
+            mysqli_query($koneksi, $query);
+            }
+        }
+
+        foreach ($penyakit_bayes as $pbayes) {
+            if ($data[$pbayes] === NULL) {
+            $query = "UPDATE hasil_diagnosa SET 
+                        $pbayes = 0
+                    WHERE idhasil = '$idhasil'
+                    ";
+            mysqli_query($koneksi, $query);
+            }
+        }
+    }
+
+    function hapus_hasil($idhasil) {
+        global $koneksi;
+        mysqli_query($koneksi, "DELETE FROM hasil_diagnosa WHERE idhasil = $idhasil");
+
+        return mysqli_affected_rows($koneksi);
     }
 ?>

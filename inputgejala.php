@@ -1,5 +1,6 @@
 <?php
   include("konek.php");
+  validasi_admin();
 
   $iddiagnosa = $_POST['diagnosa'];
   $kode = get_kode_gejala($iddiagnosa);

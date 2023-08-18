@@ -1,3 +1,15 @@
+<?php 
+  require_once 'konek.php';
+
+  validasi_admin();
+
+  $data = query("SELECT * FROM hasil_diagnosa");
+
+  
+?>
+
+
+
 <html lang="en">
 
 <head>
@@ -44,32 +56,29 @@
               <tr>
                 <th scope="col">No</th>
                 <th scope="col">Nama</th>
-                <th scope="col">Usia</th>
                 <th scope="col">Waktu</th>
-                <th scope="col">Hasil</th>
                 <th scope="col">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Nur Aeni</td>
-                <td>22</td>
-                <td>01 Juli 2023</td>
-                <td>Asma CF 80% Bayes 95%</td>
-                <td><a style="text-decoration: none;" href="">Hapus</a> | <a style="text-decoration: none;"
-                    href="">Cetak</a></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>25</td>
-                <td>30 Mei 2023</td>
-                <td>Influenza CF 70% Bayes 85%</td>
-                <td><a style="text-decoration: none;" href="">Hapus</a> | <a style="text-decoration: none;"
-                    href="">Cetak</a></td>
-              </tr>
-              <tr>
+              <?php
+                $i = 1; 
+                foreach($data as $d) :
+                $waktu_tes = strftime('%H:%M:%S / %d %B %Y', strtotime($d['tanggal']));
+                $iduser = $d['iduser'];
+                $nama = query("SELECT nama FROM user WHERE iduser = $iduser")[0];
+              ?>
+                <tr>
+                  <th scope="row"><?= $i; ?></th>
+                  <td><?= $nama['nama']; ?></td>
+                  <td><?= $waktu_tes; ?></td>
+                  <td><a style="text-decoration: none;" href="delete.php?idhasil=<?= $d['idhasil']; ?>" onclick="return confirm('Apakah anda yakin ingin menghapus data?')">Hapus</a> | <a style="text-decoration: none;"
+                      href="print.php?idhasil=<?= $d['idhasil']; ?>" target="_blank">Cetak</a></td>
+                </tr>
+              <?php 
+                $i++;
+                endforeach; 
+              ?>
             </tbody>
           </table>
         </div>

@@ -1,5 +1,6 @@
 <?php
   include("konek.php");
+  validasi_admin();
   if (isset($_POST["submit_penyakit"])) {
     if (create_penyakit($_POST) > 0) {
       create_field($_POST);

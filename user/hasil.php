@@ -9,6 +9,8 @@
     $idhasil = $_GET['idhasil'];
     $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE idhasil = $idhasil")[0];
 
+    cek_null($data_hasil);
+
     $penyakit_cf = penyakit_cf($data_hasil);
     $hasil_cf = hasil_cf($data_hasil);
     
@@ -17,6 +19,7 @@
   } else {
 
     $data_hasil = query("SELECT * FROM hasil_diagnosa WHERE iduser = $iduser AND idhasil = (SELECT MAX(idhasil) FROM hasil_diagnosa WHERE iduser = $iduser)")[0];
+    cek_null($data_hasil);
     
     $penyakit_cf = penyakit_cf($data_hasil);
     $hasil_cf = hasil_cf($data_hasil);

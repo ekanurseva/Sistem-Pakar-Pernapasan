@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 $data = query("SELECT * FROM gejala");
 
 $jumlah_gejala = jumlah_data("SELECT * FROM gejala");

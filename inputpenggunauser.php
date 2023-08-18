@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 $data_user = query("SELECT * FROM user WHERE level ='user'");
 if (isset($_POST["submit_user"])) {
   if (register($_POST) > 0) {

@@ -16,7 +16,19 @@ $pertanyaan2 = query("SELECT DISTINCT nama_gejala FROM gejala LIMIT $jumper2 OFF
 $jawaban = query("SELECT * FROM jawaban");
 
 if (isset($_POST['submit'])) {
-  hitung($_POST);
+  if(hitung($_POST) > 0) {
+    echo "
+            <script>
+                document.location.href='hasil.php';
+            </script>
+          ";
+  } else {
+    echo "
+            <script>
+                document.location.href='deteksi.php';
+            </script>
+          ";
+  }
 }
 ?>
 

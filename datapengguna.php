@@ -1,5 +1,6 @@
 <?php
 include("konek.php");
+validasi_admin();
 $data = query("SELECT * FROM user");
 
 $jumlah_admin = jumlah_data("SELECT * FROM user WHERE level = 'admin'");

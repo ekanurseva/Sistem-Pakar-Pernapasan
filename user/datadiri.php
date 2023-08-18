@@ -1,5 +1,6 @@
 <?php
 require_once '../konek.php';
+validasi();
 $id = dekripsi($_COOKIE['pernapasan']);
 
 $data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];

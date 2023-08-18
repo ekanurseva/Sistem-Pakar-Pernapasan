@@ -1,5 +1,6 @@
 <?php
 require_once 'konek.php';
+validasi_admin();
 if (isset($_GET['iddiagnosa'])) {
     $id_diagnosa = $_GET['iddiagnosa'];
     delete_field($id_diagnosa);
