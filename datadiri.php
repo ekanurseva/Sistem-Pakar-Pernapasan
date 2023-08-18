@@ -12,7 +12,7 @@ if ($data_diri['jk'] == "L") {
 }
 
 if (isset($_POST['submit'])) {
-  if (update_datadiri($_POST) > 0) {
+  if (update_datadiri_admin($_POST) > 0) {
     echo "
                   <script>
                   alert('Data Diri Berhasil Diubah');
@@ -46,8 +46,8 @@ if (isset($_POST['submit'])) {
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/admin.png" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">ADMIN</h5>
+        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="admin.php">Dashboard</a></li>
@@ -70,11 +70,12 @@ if (isset($_POST['submit'])) {
           <input type="hidden" name="iduser" value="<?= $data_diri['iduser']; ?>">
           <input type="hidden" name="oldusername" value="<?= $data_diri['username']; ?>">
           <input type="hidden" name="oldpassword" value="<?= $data_diri['password']; ?>">
+          <input type="hidden" name="oldfoto" value="<?= $data_diri['foto']; ?>">
           <div class="profil text-center mt-4">
-            <img src="img/admin.png" alt="" style="width:100px;">
+            <img src="img/<?= $data_diri['foto']; ?>" alt="" style="width:100px;">
 
             <div class="mb-3 mt-2">
-              <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile">
+              <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile" name="foto">
             </div>
           </div>
 

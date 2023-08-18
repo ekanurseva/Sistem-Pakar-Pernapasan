@@ -143,6 +143,52 @@ function uploadFoto()
         $namaFileBaru .= $kesesuaianFoto;
         //parameternya file namenya, lalu tujuannya
         move_uploaded_file($tmpName, '../img/' . $namaFileBaru);
+
+        return $namaFileBaru;
+    } else {
+        $namaFileBaru = "";
+
+        return $namaFileBaru;
+    }
+}
+
+function uploadFoto_admin()
+{
+    $namaFile = $_FILES['foto']['name'];
+    $ukuranFile = $_FILES['foto']['size'];
+    $tmpName = $_FILES['foto']['tmp_name'];
+
+    // Cek apakah ada gambar yang diupload atau tidak
+    if ($namaFile != "") {
+        //cek apakah yang di upload gambar atau bukan
+        $validFoto = ['jpg', 'jpeg', 'png'];
+        $kesesuaianFoto = explode('.', $namaFile);
+        $kesesuaianFoto = strtolower(end($kesesuaianFoto));
+
+        //cek apakah ekstensinya ada atau tidak di dalam array $validFoto
+        if (!in_array($kesesuaianFoto, $validFoto)) {
+            echo "<script>
+                    alert('Periksa Kembali File yang Anda Upload');
+                    </script>";
+            return false;
+        }
+    }
+
+
+    //cek jika ukurannya terlalu besar, ukurannya dalam byte
+    if ($ukuranFile > 5000000) {
+        echo "<script>
+                alert('Ukuran gambar terlalu besar, jangan melebihi 5mb');
+                </script>";
+        return false;
+    }
+
+    //generate nama gambar baru
+    if ($namaFile != "") {
+        $namaFileBaru = uniqid();
+        $namaFileBaru .= '.';
+        $namaFileBaru .= $kesesuaianFoto;
+        //parameternya file namenya, lalu tujuannya
         move_uploaded_file($tmpName, 'img/' . $namaFileBaru);
 
         return $namaFileBaru;
@@ -164,24 +210,34 @@ function register($data)
     $jk = $data['jk'];
     $email = $data['email'];
     $level = "user";
-    $foto = uploadFoto();
-    if ($foto == "") {
-        $foto = "admin.png";
-    }
+    $foto = "admin.png";
 
-    $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = 'username'") or die(mysqli_error($koneksi));
+    $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'") or die(mysqli_error($koneksi));
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
             alert('Username Sudah Dipakai!');
+            document.location.href='inputpenggunauser.php';
         </script>";
-        return false;
+        exit;
     }
+
+    $result = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'") or die(mysqli_error($koneksi));
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+            alert('Email Sudah Dipakai!');
+            document.location.href='inputpenggunauser.php';
+        </script>";
+        exit;
+    }
+
     if ($password !== $password2) {
         echo "<script>
             alert('Password Tidak Sesuai!');
+            document.location.href='inputpenggunauser.php';
         </script>";
-        return false;
+        exit;
     }
+
     $password = password_hash($password2, PASSWORD_DEFAULT);
 
     mysqli_query($koneksi, "INSERT INTO user VALUES ('NULL', '$username', '$password', '$nama', '$jk', '$email', '$level', '$foto')");
@@ -199,23 +255,32 @@ function register_admin($data)
     $jk = $data['jk'];
     $email = $data['email'];
     $level = "admin";
-    $foto = uploadFoto();
-    if ($foto == "") {
-        $foto = "admin.png";
-    }
+    $foto = "admin.png";
 
-    $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = 'username'") or die(mysqli_error($koneksi));
+    $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'") or die(mysqli_error($koneksi));
     if (mysqli_fetch_assoc($result)) {
         echo "<script>
             alert('Username Sudah Dipakai!');
+            document.location.href='inputpenggunaadmin.php';
         </script>";
-        return false;
+        exit;
     }
+
+    $result = mysqli_query($koneksi, "SELECT email FROM user WHERE email = '$email'") or die(mysqli_error($koneksi));
+    if (mysqli_fetch_assoc($result)) {
+        echo "<script>
+            alert('Email Sudah Dipakai!');
+            document.location.href='inputpenggunaadmin.php';
+        </script>";
+        exit;
+    }
+
     if ($password !== $password2) {
         echo "<script>
             alert('Password Tidak Sesuai!');
+            document.location.href='inputpenggunaadmin.php';
         </script>";
-        return false;
+        exit;
     }
     $password = password_hash($password2, PASSWORD_DEFAULT);
 
@@ -231,24 +296,15 @@ function edit_pengguna($data)
     $iduser = $data['iduser'];
     $oldusername = $data['oldusername'];
     $oldpassword = $data['oldpassword'];
-    $oldfoto = $data['oldfoto'];
     $oldemail = $data['oldemail'];
+
     $username = strtolower(stripslashes($data["username"]));
     $password = mysqli_real_escape_string($koneksi, $data["password"]);
     $password2 = mysqli_real_escape_string($koneksi, $data["password2"]);
     $nama = $data['nama'];
     $jk = $data['jk'];
     $email = htmlspecialchars($data['email']);
-    $foto = uploadFoto();
-    if ($foto == "") {
-        $foto = $oldfoto;
-    }
-
-    if (isset($data['oldlevel'])) {
-        $level = $data['oldlevel'];
-    } else {
-        $level = $data['level'];
-    }
+    $level = $data['level'];
 
 
     if ($username !== $oldusername) {
@@ -257,17 +313,19 @@ function edit_pengguna($data)
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
                 alert('Username Sudah Dipakai!');
+                document.location.href='datapengguna.php';
             </script>";
-            return false;
+            exit;
         }
     }
 
     if ($password !== $oldpassword) {
         if ($password !== $password2) {
             echo "<script>
-                    alert('Password Tidak Sesuai!');
-                  </script>";
-            return false;
+                alert('Password tidak sesuai');
+                document.location.href='datapengguna.php';
+            </script>";
+            exit;
         }
 
         $password = password_hash($password2, PASSWORD_DEFAULT);
@@ -278,17 +336,13 @@ function edit_pengguna($data)
 
         if (mysqli_fetch_assoc($result)) {
             echo "<script>
-                    alert('Email sudah digunakan, silahkan pakai email lain');
-                  </script>";
-            return false;
+                alert('Email Sudah Dipakai!');
+                document.location.href='datapengguna.php';
+            </script>";
+            exit;
         }
     }
 
-
-    if ($foto != $oldfoto && $oldfoto != "admin.png") {
-        unlink("img/$oldfoto");
-        unlink("../img/$oldfoto");
-    }
 
     $query = "UPDATE user SET 
                 username = '$username',
@@ -296,8 +350,7 @@ function edit_pengguna($data)
                 nama = '$nama',
                 jk = '$jk',
                 email = '$email',
-                level = '$level',
-                foto = '$foto'
+                level = '$level'
               WHERE iduser = '$iduser'
             ";
     mysqli_query($koneksi, $query);
@@ -976,12 +1029,17 @@ function get_kode_gejala($diagnosis)
         $iduser = $data['iduser'];
         $oldusername = $data['oldusername'];
         $oldpassword = $data['oldpassword'];
+        $oldfoto = $data['oldfoto'];
         $nama = $data['nama'];
         $username = $data['username'];
         $email = $data['email'];
         $password = $data['password'];
         $password2 = $data['password2'];
         $jk = $data['jk'];
+        $foto = uploadFoto();
+        if($foto == "") {
+            $foto = $oldfoto;
+        }
 
         if($username !== $oldusername) {
             $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'");
@@ -1009,12 +1067,78 @@ function get_kode_gejala($diagnosis)
             $password = password_hash($password2, PASSWORD_DEFAULT);
         }
 
+        if($foto != $oldfoto && $oldfoto != "admin.png") {
+            unlink("../img/$oldfoto");
+        }
+
         $query = "UPDATE user SET 
                     username = '$username',
                     password = '$password',
                     nama = '$nama',
                     jk = '$jk',
-                    email = '$email'
+                    email = '$email',
+                    foto = '$foto'
+                  WHERE iduser = '$iduser'
+                ";
+        mysqli_query($koneksi, $query);
+
+        return mysqli_affected_rows($koneksi);
+    }
+
+    function update_datadiri_admin($data) {
+        global $koneksi;
+        $iduser = $data['iduser'];
+        $oldusername = $data['oldusername'];
+        $oldpassword = $data['oldpassword'];
+        $oldfoto = $data['oldfoto'];
+        $nama = $data['nama'];
+        $username = $data['username'];
+        $email = $data['email'];
+        $password = $data['password'];
+        $password2 = $data['password2'];
+        $jk = $data['jk'];
+        $foto = uploadFoto_admin();
+        if($foto == "") {
+            $foto = $oldfoto;
+        }
+
+        if($username !== $oldusername) {
+            $result = mysqli_query($koneksi, "SELECT username FROM user WHERE username = '$username'");
+
+            if (mysqli_fetch_assoc($result)) {
+                echo "
+                    <script>
+                        alert('Username sudah digunakan');
+                        document.location.href='datadiri.php';
+                    </script>
+                ";
+                exit();
+            }
+        }
+
+        if($password !== $oldpassword) {
+            if ($password !== $password2) {
+                echo "<script>
+                        alert('Password tidak sesuai!');
+                        document.location.href='datadiri.php';
+                      </script>";
+                exit();
+            }
+
+            $password = password_hash($password2, PASSWORD_DEFAULT);
+        }
+
+        if($foto != $oldfoto && $oldfoto != "admin.png") {
+            unlink("img/$oldfoto");
+        }
+
+        $query = "UPDATE user SET 
+                    username = '$username',
+                    password = '$password',
+                    nama = '$nama',
+                    jk = '$jk',
+                    email = '$email',
+                    foto = '$foto'
                   WHERE iduser = '$iduser'
                 ";
         mysqli_query($koneksi, $query);

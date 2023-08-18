@@ -46,7 +46,7 @@ if (isset($_POST['submit'])) {
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="../img/admin.png" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <img src="../img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
         <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">
           <?= $data_diri['nama']; ?>
         </h5>
@@ -63,15 +63,17 @@ if (isset($_POST['submit'])) {
     <div class="content" style="width:80%;">
       <div class="container" style="padding-left: 35px; padding-right: 20px;">
         <h1 style="text-align:center; margin-top: 30px; color: black; padding: 0px 35px">Data Diri</h1>
+
         <form action="" method="post" enctype="multipart/form-data">
           <input type="hidden" name="iduser" value="<?= $data_diri['iduser']; ?>">
           <input type="hidden" name="oldusername" value="<?= $data_diri['username']; ?>">
           <input type="hidden" name="oldpassword" value="<?= $data_diri['password']; ?>">
+          <input type="hidden" name="oldfoto" value="<?= $data_diri['foto']; ?>">
           <div class="profil text-center mt-4">
-            <img src="../img/admin.png" alt="" style="width:100px;">
+            <img src="../img/<?= $data_diri['foto']; ?>" alt="" style="width:100px;">
 
             <div class="mb-3 mt-2">
-              <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile">
+              <input style="width: 250px; margin-left: 37%;" class="form-control" type="file" id="formFile" name="foto">
             </div>
           </div>
 

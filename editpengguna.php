@@ -2,6 +2,9 @@
 include("konek.php");
 validasi_admin();
 
+$id = dekripsi($_COOKIE['pernapasan']);
+$data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
+
 $iduser = $_GET['id'];
 
 $data = query("SELECT * FROM user WHERE iduser = $iduser")[0];
@@ -48,8 +51,8 @@ if (isset($_POST['submit'])) {
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/admin.png" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">ADMIN</h5>
+        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
@@ -74,6 +77,7 @@ if (isset($_POST['submit'])) {
           <input type="hidden" name="oldusername" value="<?= $data['username']; ?>">
           <input type="hidden" name="oldpassword" value="<?= $data['password']; ?>">
           <input type="hidden" name="oldemail" value="<?= $data['email']; ?>">
+          
           <div class="mb-3">
             <label class="form-label">Nama</label>
             <input type="text" class="form-control" value="<?= $data['nama']; ?>" name="nama">
@@ -96,9 +100,9 @@ if (isset($_POST['submit'])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Jenis Kelamin</label>
-            <select class="form-select" name="jk" aria-label="Default select example" name="jk">
-              <option selected hidden>
-                <?= $data['jk']; ?>
+            <select class="form-select" name="jk" aria-label="Default select example">
+              <option selected hidden value="<?= $data['jk']; ?>">
+                <?= $jk; ?>
               </option>
               <option value="P">Perempuan</option>
               <option value="L">Laki-Laki</option>
@@ -106,7 +110,13 @@ if (isset($_POST['submit'])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Level</label>
-            <input type="text" class="form-control" value="<?= $data['level']; ?>" name="level">
+            <select class="form-select" aria-label="Default select example" name="level">
+              <option selected hidden value="<?= $data['level']; ?>">
+                <?= $data['level']; ?>
+              </option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
           </div>
           <button type="submit" class="btn btn-primary" name="submit">Update</button>
         </form>

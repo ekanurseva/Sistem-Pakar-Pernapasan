@@ -1,6 +1,10 @@
 <?php
 include("konek.php");
 validasi_admin();
+
+$id = dekripsi($_COOKIE['pernapasan']);
+$data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
+
 $penyakit = mysqli_query($koneksi, "SELECT * FROM diagnosa ORDER BY iddiagnosa DESC");
 
 if (isset($_POST["submit_solusi"])) {
@@ -35,9 +39,9 @@ if (isset($_POST["submit_solusi"])) {
     <div class="main-container d-flex">
         <div class="sidebar px-3 pt-3">
             <div class="header pb-3">
-                <img src="img/admin.png" style="width:50px; margin-right: auto; margin-left: auto; display:block"
+                <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block"
                     alt="">
-                <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">ADMIN</h5>
+                <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
             </div>
             <ul class="">
                 <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>

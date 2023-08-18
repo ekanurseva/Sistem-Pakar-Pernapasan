@@ -1,7 +1,10 @@
 <?php
 include("konek.php");
 validasi_admin();
-$data_user = query("SELECT * FROM user WHERE level ='admin'");
+
+$id = dekripsi($_COOKIE['pernapasan']);
+$data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
+
 if (isset($_POST["submit_admin"])) {
   if (register_admin($_POST) > 0) {
     echo "
@@ -33,8 +36,8 @@ if (isset($_POST["submit_admin"])) {
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/admin.png" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">ADMIN</h5>
+        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
@@ -78,9 +81,8 @@ if (isset($_POST["submit_admin"])) {
           <div class="mb-3">
             <label class="form-label">Jenis Kelamin</label>
             <select class="form-select" name="jk" aria-label="Default select example">
-              <option selected>Open this select menu</option>
               <option value="P">Perempuan</option>
-              <option value="L">Laki-Laki</option>
+              <option value="L" selected>Laki-Laki</option>
             </select>
           </div>
           <button type="submit" name="submit_admin" class="btn btn-primary">Submit</button>
