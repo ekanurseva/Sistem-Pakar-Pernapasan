@@ -46,14 +46,17 @@ if (isset($_POST['submit_penyakit'])) {
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
+        <img src="img/<?= $data_diri['foto']; ?>"
+          style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">
+          <?= $data_diri['nama']; ?>
+        </h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
         <li class=""><a href="Riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a>
         </li>
-        <li class=""><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan Jawaban</a>
+        <li class=""><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Data Jawaban</a>
         </li>
         <li class=""><a href="gejala.php" style="font-size: 17px; text-decoration: none;">Data Gejala</a></li>
         <li class="active"><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi
@@ -82,7 +85,8 @@ if (isset($_POST['submit_penyakit'])) {
           </div>
           <div class="mb-3">
             <label class="form-label">Deskripsi</label>
-            <textarea name="deskripsi" id="" cols="30" rows="10" class="form-control"><?= $data['deskripsi']; ?></textarea>
+            <textarea name="deskripsi" id="" cols="30" rows="10"
+              class="form-control"><?= $data['deskripsi']; ?></textarea>
           </div>
 
           <button type="submit" class="btn btn-primary" name="submit_penyakit">Update</button>

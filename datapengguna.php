@@ -27,14 +27,17 @@ $jumlah_user = jumlah_data("SELECT * FROM user WHERE level = 'user'");
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
+        <img src="img/<?= $data_diri['foto']; ?>"
+          style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">
+          <?= $data_diri['nama']; ?>
+        </h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="admin.php">Dashboard</a></li>
         <li class=""><a href="riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a>
         </li>
-        <li class=""><a href="pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan Jawaban</a>
+        <li class=""><a href="pertanyaan.php" style="font-size: 17px; text-decoration: none;">PData Jawaban</a>
         </li>
         <li class=""><a href="gejala.php" style="font-size: 17px; text-decoration: none;">Data Gejala</a></li>
         <li class=""><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi </a>

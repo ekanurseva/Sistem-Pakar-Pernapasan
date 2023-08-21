@@ -50,8 +50,8 @@ if (isset($_POST['submit_pertanyaan'])) {
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
         <li class=""><a href="Riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a>
         </li>
-        <li class="active"><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan
-            Jawaban</a></li>
+        <li class="active"><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Data Jawaban</a>
+        </li>
         <li class=""><a href="gejala.php" style="font-size: 17px; text-decoration: none;">Data Gejala</a></li>
         <li class=""><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi </a>
         </li>

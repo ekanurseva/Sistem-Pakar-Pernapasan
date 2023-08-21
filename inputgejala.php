@@ -1,28 +1,28 @@
 <?php
-  include("konek.php");
-  validasi_admin();
+include("konek.php");
+validasi_admin();
 
-  $id = dekripsi($_COOKIE['pernapasan']);
-  $data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
+$id = dekripsi($_COOKIE['pernapasan']);
+$data_diri = query("SELECT * FROM user WHERE iduser = $id")[0];
 
-  $iddiagnosa = $_POST['diagnosa'];
-  $kode = get_kode_gejala($iddiagnosa);
+$iddiagnosa = $_POST['diagnosa'];
+$kode = get_kode_gejala($iddiagnosa);
 
-  $data_diagnosa = query("SELECT * FROM diagnosa WHERE iddiagnosa = $iddiagnosa") [0];
+$data_diagnosa = query("SELECT * FROM diagnosa WHERE iddiagnosa = $iddiagnosa")[0];
 
-  if (isset($_POST["submit_gejala"])) {
-    if (create_gejala($_POST) > 0) {
-      echo " 
+if (isset($_POST["submit_gejala"])) {
+  if (create_gejala($_POST) > 0) {
+    echo " 
       <script>
       alert('Data Gejala Berhasil Ditambah');
       document.location.href='gejala.php';
       </script>
       ";
-    } else {
-      echo "<script>
+  } else {
+    echo "<script>
       alert('Data Gejala Gagal Ditambah');
       </script>";
-    }
+  }
 }
 ?>
 <html lang="en">
@@ -41,14 +41,17 @@
   <div class="main-container d-flex">
     <div class="sidebar px-3 pt-3">
       <div class="header pb-3">
-        <img src="img/<?= $data_diri['foto']; ?>" style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
-        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel"><?= $data_diri['nama']; ?></h5>
+        <img src="img/<?= $data_diri['foto']; ?>"
+          style="width:50px; margin-right: auto; margin-left: auto; display:block" alt="">
+        <h5 class="offcanvas-title fw-bold text-center" style="font-size: 20px" id="offcanvasLabel">
+          <?= $data_diri['nama']; ?>
+        </h5>
       </div>
       <ul class="">
         <li class=""><a style="font-size: 17px; text-decoration: none;" href="index.php">Dashboard</a></li>
         <li class=""><a href="Riwayatdeteksi.php" style="font-size: 17px; text-decoration: none;">Riwayat Deteksi</a>
         </li>
-        <li class=""><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Pertanyaan dan Jawaban</a>
+        <li class=""><a href="Pertanyaan.php" style="font-size: 17px; text-decoration: none;">Data Jawaban</a>
         </li>
         <li class="active"><a href="gejala.php" style="font-size: 17px; text-decoration: none;">Data Gejala</a></li>
         <li class=""><a href="penyakit.php" style="font-size: 17px; text-decoration: none;">Penyakit dan Solusi </a>
